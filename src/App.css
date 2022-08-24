@@ -1,0 +1,64 @@
+* {
+  margin: 0;
+}
+
+.App {
+  text-align: center;
+}
+
+:root {
+  --main: #051e34;
+  --header: #e0e0e0;
+  --sidebar: #373a47;
+  --pink-color: rgb(253, 212, 219);
+}
+
+#app-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: fixed;
+  top: 10vh;
+  left: 0vw;
+  width: 100%;
+}
+
+#levelHolder {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 50px;
+  margin-top: 2vh;
+  width: 80%;
+  height: 70vh;
+}
+
+header {
+  background-color: var(--main);
+  height: 10vh;
+  min-height: 85px;
+  margin: 0;
+  color: var(--header);
+  position: fixed;
+  top: 100;
+  width: 100%;
+  z-index: 1000;
+}
+
+.sceneImg {
+  border-radius: 10px;
+}
+
+#chooseLevel {
+  background-color: var(--pink-color);
+  width: 100%;
+  height: 8vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.link {
+  color: var(--main);
+  text-decoration: none;
+}

@@ -1,0 +1,85 @@
+.sideDiv {
+  position: fixed;
+  left: 0;
+  top: 10vh;
+  width: 20vw;
+  background-color: var(--header);
+  height: 90vh;
+  margin-right: 2vw;
+  padding-top: 3vh;
+}
+
+.divHeader {
+  background-color: var(--sidebar);
+  position: fixed;
+  top: 10vh;
+  left: 20vw;
+  width: 80vw;
+  height: 8vh;
+  color: var(--header);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#leaderboard {
+  position: fixed;
+  top: 18vh;
+  left: 20vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80vw;
+}
+
+#board {
+  width: 40vw;
+  height: 80vh;
+  border: 1px solid black;
+  text-align: left;
+}
+
+#topTen {
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 30px;
+  line-height: 1.5;
+}
+
+.rank {
+  width: calc(10vw - 20px);
+}
+
+.player {
+  width: 18vw;
+  margin-right: 1vw;
+  margin-left: 1vw;
+}
+
+.time {
+  width: calc(10vw - 20px);
+}
+
+.levelHolder {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 50vh;
+  margin-top: 3vh;
+}
+
+.levelBtn {
+  border: none;
+  height: 5vh;
+  width: 80%;
+  background-color: var(--header);
+  font-size: 20px;
+  border-radius: 10px;
+}
+
+.levelBtn:hover {
+  background-color: var(--main);
+  color: var(--pink-color);
+}

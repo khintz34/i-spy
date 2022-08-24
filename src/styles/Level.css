@@ -1,0 +1,13 @@
+.levelMini {
+  height: 35vh;
+  width: 35vh;
+  border: 1px solid var(--main);
+  border-radius: 10px;
+  margin-top: 1vh;
+}
+
+.levelMini:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+  box-shadow: 10px 10px 8px #888888;
+}
