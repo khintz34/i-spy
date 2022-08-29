@@ -16,7 +16,9 @@ const Game = (props) => {
   let random = Math.floor(Math.random() * 1000);
   const box = document.querySelector("#dropdown");
   const searchArray = props.search;
+  // eslint-disable-next-line no-unused-vars
   const { currentLevel, setCurrentLevel } = useContext(CurrentLevelContext);
+  // eslint-disable-next-line no-unused-vars
   const { currentBoard, setCurrentBoard } = useContext(CurrentBoardContext);
   const [iSpyList, setISpyList] = useState({});
   let modal = document.querySelector("#winModal");
@@ -24,6 +26,7 @@ const Game = (props) => {
   useEffect(() => {
     // set class for any li with true to strike
 
+    // eslint-disable-next-line no-unused-vars
     for (let [key, value] of Object.entries(iSpyList)) {
       let classEdit = key.replace(/\s+/g, "").toLowerCase();
       let item = document.querySelector(`#search-${classEdit}`);
@@ -36,6 +39,7 @@ const Game = (props) => {
     if (Object.keys(iSpyList).length === searchArray.length) {
       modal.style.display = "block";
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [iSpyList]);
 
   function showList(e) {
@@ -86,12 +90,12 @@ const Game = (props) => {
       let item = document.querySelector(`#search-${classEdit}`);
       item.classList.remove("strike");
     }
-    // box.classList.add("hidden");
+    box.classList.add("hidden");
   }
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function (event) {
-    if (event.target == modal) {
+    if (event.target === modal) {
       exitModal();
     }
   };
