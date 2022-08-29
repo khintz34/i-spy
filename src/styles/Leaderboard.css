@@ -34,8 +34,8 @@
 
 #board {
   width: 40vw;
-  height: 80vh;
-  border: 1px solid black;
+  min-height: 90vh;
+  background-color: var(--pink-color);
   text-align: left;
 }
 
@@ -80,6 +80,11 @@
 }
 
 .levelBtn:hover {
+  background-color: var(--main);
+  color: var(--pink-color);
+}
+
+.activeBtn {
   background-color: var(--main);
   color: var(--pink-color);
 }

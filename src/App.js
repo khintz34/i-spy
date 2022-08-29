@@ -12,92 +12,65 @@ import levelSix from "../src/images/levelSix.webp";
 import Leaderboard from "./components/Leaderboard";
 import Rules from "./components/Rules";
 import About from "./components/About";
+import { CurrentLevelContext } from "./contexts/CurrentLevel";
+import { useState } from "react";
+import { CurrentBoardContext } from "./contexts/CurrentBoard";
+import {
+  assortOneList,
+  assortTwoList,
+  chessList,
+  hoarderList,
+  roomList,
+  winterList,
+} from "../src/assets/finderLists.js";
 
 function App() {
-  const Array1 = [
-    "Kite",
-    "Diamond Ring",
-    "Hockey Stick",
-    "Fish",
-    "Car",
-    "Book",
-  ];
+  const [currentLevel, setCurrentLevel] = useState([]);
+  const [currentBoard, setCurrentBoard] = useState([]);
 
-  const Array2 = ["Matches", "Number Three", "Lit Candle", "Letter"];
-
-  const Array3 = [
-    "Blue Push Pin",
-    "Fish",
-    "Alien",
-    "Triceratops",
-    "Snail",
-    "Blue Umbrella",
-  ];
-
-  const Array4 = [
-    "Teeth",
-    "Blue Sunglasses",
-    "'Letter 'K'",
-    "Star Fish",
-    "Shuttle Cock",
-    "Zerba Stripes",
-    "Corgi",
-  ];
-
-  const Array5 = [
-    "Frog",
-    "Soccer Player",
-    "Cat",
-    "Red Ribbon",
-    "Belt",
-    "Cell Phone",
-    "Lemon",
-  ];
-
-  const Array6 = [
-    "Sugar",
-    "Spoon",
-    "Car",
-    "Rooster",
-    "Pencil Sharpener",
-    "Pearls",
-    "Air Plane",
-  ];
   return (
     <BrowserRouter>
       <div className="App" id="outer-container">
         <div id="page-wrap">
-          <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/game1"
-              element={<Game img={levelOne} search={Array1} />}
-            />
-            <Route
-              path="/game2"
-              element={<Game img={levelTwo} search={Array2} />}
-            />
-            <Route
-              path="/game3"
-              element={<Game img={levelThree} search={Array3} />}
-            />
-            <Route
-              path="/game4"
-              element={<Game img={levelFour} search={Array4} />}
-            />
-            <Route
-              path="/game5"
-              element={<Game img={levelFive} search={Array5} />}
-            />
-            <Route
-              path="/game6"
-              element={<Game img={levelSix} search={Array6} />}
-            />
-            <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="/rules" element={<Rules />} />
-            <Route path="/about" element={<About />} />
-          </Routes>
+          <CurrentLevelContext.Provider
+            value={{ currentLevel, setCurrentLevel }}
+          >
+            <CurrentBoardContext.Provider
+              value={{ currentBoard, setCurrentBoard }}
+            >
+              <Header />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route
+                  path="/game1"
+                  element={<Game img={levelOne} search={winterList} />}
+                />
+                <Route
+                  path="/game2"
+                  element={<Game img={levelTwo} search={chessList} />}
+                />
+                <Route
+                  path="/game3"
+                  element={<Game img={levelThree} search={assortOneList} />}
+                />
+                <Route
+                  path="/game4"
+                  element={<Game img={levelFour} search={assortTwoList} />}
+                />
+                <Route
+                  path="/game5"
+                  element={<Game img={levelFive} search={roomList} />}
+                />
+                <Route
+                  path="/game6"
+                  element={<Game img={levelSix} search={hoarderList} />}
+                />
+                <Route path="/leaderboard" element={<Leaderboard />} />
+                <Route path="/rules" element={<Rules />} />
+                <Route path="/about" element={<About />} />
+              </Routes>
+            </CurrentBoardContext.Provider>
+          </CurrentLevelContext.Provider>
         </div>
       </div>
     </BrowserRouter>
