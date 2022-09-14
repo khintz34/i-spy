@@ -1,145 +1,128 @@
 export const winterData = [
   {
-    name: "Winter1",
+    username: "Winter1",
     time: "20s",
   },
   {
-    name: "Hads",
+    username: "Hads",
     time: "30s",
   },
   {
-    name: "Morgan",
+    username: "Morgan",
     time: "40s",
   },
   {
-    name: "Winter4",
+    username: "Winter4",
     time: "1m",
   },
 ];
 
-export const chessData = [
-  {
-    name: "Chess1",
-    time: "20s",
-  },
-  {
-    name: "Hads",
-    time: "30s",
-  },
-  {
-    name: "Morgan",
-    time: "40s",
-  },
-  {
-    name: "Chess111",
-    time: "1m",
-  },
-];
+export let chessData = [];
 
 export const assortOneData = [
   {
-    name: "Ass1",
+    username: "Ass1",
     time: "20s",
   },
   {
-    name: "Hads",
+    username: "Hads",
     time: "30s",
   },
   {
-    name: "Morgan",
+    username: "Morgan",
     time: "40s",
   },
   {
-    name: "Ass14",
+    username: "Ass14",
     time: "1m",
   },
 ];
 
 export const assortTwoData = [
   {
-    name: "Ass2",
+    username: "Ass2",
     time: "20s",
   },
   {
-    name: "Hads",
+    username: "Hads",
     time: "30s",
   },
   {
-    name: "Morgan",
+    username: "Morgan",
     time: "40s",
   },
   {
-    name: "Ass24",
+    username: "Ass24",
     time: "1m",
   },
 ];
 
 export const roomData = [
   {
-    name: "Room1",
+    username: "Room1",
     time: "20s",
   },
   {
-    name: "Hads",
+    username: "Hads",
     time: "30s",
   },
   {
-    name: "Room3",
+    username: "Room3",
     time: "40s",
   },
   {
-    name: "Tomas",
+    username: "Tomas",
     time: "1m",
   },
   {
-    name: "Room1",
+    username: "Room1",
     time: "20s",
   },
   {
-    name: "Hads",
+    username: "Hads",
     time: "30s",
   },
   {
-    name: "Room3",
+    username: "Room3",
     time: "40s",
   },
   {
-    name: "Tomas",
+    username: "Tomas",
     time: "1m",
   },
   {
-    name: "Room1",
+    username: "Room1",
     time: "20s",
   },
   {
-    name: "Hads",
+    username: "Hads",
     time: "30s",
   },
   {
-    name: "Room3",
+    username: "Room3",
     time: "40s",
   },
   {
-    name: "Tomas",
+    username: "Tomas",
     time: "1m",
   },
 ];
 
 export const hoarderData = [
   {
-    name: "HoarderOne",
+    username: "HoarderOne",
     time: "20s",
   },
   {
-    name: "Hads",
+    username: "Hads",
     time: "30s",
   },
   {
-    name: "Morgan",
+    username: "Morgan",
     time: "40s",
   },
   {
-    name: "Dirty",
+    username: "Dirty",
     time: "1m",
   },
 ];

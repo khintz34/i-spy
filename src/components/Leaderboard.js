@@ -12,6 +12,8 @@ import {
 } from "../assets/data";
 import { CurrentLevelContext } from "../contexts/CurrentLevel";
 import { CurrentBoardContext } from "../contexts/CurrentBoard";
+import { displayArray, emptyData, getUserData } from "../utils/firebase";
+import { refreshData } from "../utils/dataRefresh";
 
 const Leaderboard = (props) => {
   const { currentLevel, setCurrentLevel } = useContext(CurrentLevelContext);
@@ -26,16 +28,22 @@ const Leaderboard = (props) => {
   const changeLevel = (level) => {
     if (level === "chess") {
       setCurrentLevel(chess);
+      getUserData("Chess Scene");
     } else if (level === "winter") {
       setCurrentLevel(winter);
+      getUserData("Winter Scene");
     } else if (level === "assortOne") {
       setCurrentLevel(assortOne);
+      getUserData("Assortment One");
     } else if (level === "assortTwo") {
       setCurrentLevel(assortTwo);
+      getUserData("Assortment Two");
     } else if (level === "room") {
       setCurrentLevel(room);
+      getUserData("Room Scene");
     } else if (level === "hoarder") {
       setCurrentLevel(hoarder);
+      getUserData("Hoarder Scene");
     }
 
     changeHeader(level);
@@ -85,8 +93,9 @@ const Leaderboard = (props) => {
     } else if (currentBoard === "Room Scene") {
       activateButton("room");
     }
-    console.log(currentBoard);
   });
+
+  const newArray = JSON.parse(JSON.stringify(displayArray));
 
   return (
     <div id="leader-main">
@@ -136,16 +145,18 @@ const Leaderboard = (props) => {
                 <tr>
                   <th className="rank">Rank</th>
                   <th className="player">Player</th>
-                  <th className="time">Time</th>
+                  <th className="time">Time (sec)</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
-                {currentLevel.map((value, key) => {
+                {newArray.map((value, key) => {
                   return (
                     <tr key={key}>
                       <td>{key + 1}</td>
-                      <td>{value.name}</td>
+                      <td>{value.username}</td>
                       <td>{value.time}</td>
+                      {/* <td>seconds</td> */}
                     </tr>
                   );
                 })}

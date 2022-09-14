@@ -33,10 +33,11 @@
 }
 
 #board {
-  width: 40vw;
-  min-height: 90vh;
+  width: 50vw;
+  height: 90vh;
   background-color: var(--pink-color);
   text-align: left;
+  overflow-y: auto;
 }
 
 #topTen {
@@ -45,20 +46,25 @@
   padding-right: 20px;
   font-size: 30px;
   line-height: 1.5;
+  overflow-y: auto;
 }
 
+#tableTop {
+  overflow: auto;
+  padding-bottom: 20px;
+}
 .rank {
   width: calc(10vw - 20px);
 }
 
 .player {
-  width: 18vw;
+  width: 25vw;
   margin-right: 1vw;
   margin-left: 1vw;
 }
 
 .time {
-  width: calc(10vw - 20px);
+  width: calc(15vw - 20px);
 }
 
 .levelHolder {
@@ -87,4 +93,9 @@
 .activeBtn {
   background-color: var(--main);
   color: var(--pink-color);
+}
+
+#secondsRow {
+  height: 2px;
+  color: blue;
 }

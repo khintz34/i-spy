@@ -11,9 +11,11 @@ import {
   winterData,
 } from "../assets/data";
 import { CurrentBoardContext } from "../contexts/CurrentBoard";
+import { getUserData, writeUserData } from "../utils/firebase";
 
 const Game = (props) => {
   let random = Math.floor(Math.random() * 1000);
+  let totalTime = 0;
   const box = document.querySelector("#dropdown");
   const searchArray = props.search;
   // eslint-disable-next-line no-unused-vars
@@ -22,6 +24,10 @@ const Game = (props) => {
   const { currentBoard, setCurrentBoard } = useContext(CurrentBoardContext);
   const [iSpyList, setISpyList] = useState({});
   let modal = document.querySelector("#winModal");
+  const [user, setUser] = useState("");
+  const [startTime, setStartTime] = useState(Math.floor(Date.now() / 1000));
+  const [endTime, setEndTime] = useState(Math.floor(Date.now() / 1000));
+  console.log(startTime);
 
   useEffect(() => {
     // set class for any li with true to strike
@@ -38,6 +44,8 @@ const Game = (props) => {
     // check to see if every item in list was found
     if (Object.keys(iSpyList).length === searchArray.length) {
       modal.style.display = "block";
+      setEndTime(Math.floor(Date.now() / 1000));
+      totalTime = endTime - startTime;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [iSpyList]);
@@ -60,21 +68,33 @@ const Game = (props) => {
     });
   }
 
-  function submitModal() {
+  async function submitModal() {
+    let userLevel;
+
     exitModal();
     if (searchArray[0] === "Matches") {
       setContexts(chessData, "Chess Scene");
+      userLevel = "Chess Scene";
     } else if (searchArray[0] === "Kite") {
       setContexts(winterData, "Winter Scene");
+      userLevel = "Winter Scene";
     } else if (searchArray[0] === "Blue Push Pin") {
       setContexts(assortOneData, "Assortment One");
+      userLevel = "Assortment One";
     } else if (searchArray[0] === "Teeth") {
       setContexts(assortTwoData, "Assortment Two");
+      userLevel = "Assortment Two";
     } else if (searchArray[0] === "Frog") {
       setContexts(roomData, "Room Scene");
+      userLevel = "Room Scene";
     } else if (searchArray[0] === "Sugar") {
       setContexts(hoarderData, "Hoarder Scene");
+      userLevel = "Hoarder Scene";
     }
+
+    const userName = document.querySelector("#userNameInput").value;
+
+    await writeUserData(userLevel, userName, endTime - startTime);
   }
 
   function setContexts(level, board) {
@@ -155,10 +175,10 @@ const Game = (props) => {
         </ul>
       </div>
       <div id="winModal" className="modal">
-        <div class="modal-content">
+        <div className="modal-content">
           <h1>
             Congrats! You finished in
-            <span> {random} </span>
+            <span> {endTime - startTime} </span>
             seconds!
           </h1>
           <h3 id="modalPara">
@@ -171,9 +191,11 @@ const Game = (props) => {
             id="userNameInput"
             maxLength="25"
           />
-          <div>
-            <button onClick={exitModal}>Exit</button>
-            <button onClick={submitModal}>
+          <div className="gameBtnSetUp">
+            <button onClick={exitModal} className="btnSize exitBtnColor">
+              Exit
+            </button>
+            <button onClick={submitModal} className="btnSize subBtnColor">
               <Link to="/leaderboard" className="linkSub">
                 Submit
               </Link>

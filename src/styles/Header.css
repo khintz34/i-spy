@@ -5,3 +5,12 @@
   height: 100%;
   width: 100%;
 }
+
+.linkHead {
+  color: var(--header);
+  text-decoration: none;
+}
+
+.linkHead:hover {
+  color: var(--pink-color);
+}

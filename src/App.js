@@ -23,10 +23,16 @@ import {
   roomList,
   winterList,
 } from "../src/assets/finderLists.js";
+import { winterData } from "./assets/data";
+import { getUserData } from "./utils/firebase";
 
 function App() {
   const [currentLevel, setCurrentLevel] = useState([]);
   const [currentBoard, setCurrentBoard] = useState([]);
+
+  function initLeaderBoards(dataList) {
+    getUserData(dataList);
+  }
 
   return (
     <BrowserRouter>

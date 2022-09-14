@@ -129,7 +129,37 @@
   margin-bottom: 2vh;
 }
 
+#userNameInput:hover {
+  transform: scale(1.05);
+}
+
 .linkSub {
   text-decoration: none;
-  color: black;
+  color: white;
+}
+
+.gameBtnSetUp {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 50px;
+}
+
+.btnSize {
+  width: 90px;
+  border-radius: 5px;
+  border: 1px solid var(--main);
+  font-size: 15px;
+}
+
+.btnSize:hover {
+  transform: scale(1.05);
+}
+
+.exitBtnColor {
+  background-color: var(--pink-color);
+}
+
+.subBtnColor {
+  background-color: var(--main);
 }
