@@ -56,6 +56,8 @@ const Game = (props) => {
     box.style.top = e.clientY + 40 + "px";
     box.style.left = e.clientX + 20 + "px";
 
+    console.log(e.clientX);
+
     // Might need to move the positioning based on where the click is
   }
 
