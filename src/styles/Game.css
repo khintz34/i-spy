@@ -163,3 +163,20 @@
 .subBtnColor {
   background-color: var(--main);
 }
+
+#dropDownExitBtn {
+  background-color: red;
+  color: white;
+  font-weight: bolder;
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+}
+
+#dropDownExitBtn:hover {
+  background-color: white;
+  color: red;
+}

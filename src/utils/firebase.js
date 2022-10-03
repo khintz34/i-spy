@@ -9,6 +9,7 @@ import {
   roomData,
   winterData,
 } from "../assets/data";
+import { useContext } from "react";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDAD2JUqxqvCm2y8Tjf4GT343SNIYRuk44",
@@ -26,6 +27,9 @@ let datasetName;
 export let displayArray = [];
 
 export function writeUserData(board, name, time) {
+  console.log(board);
+  console.log(name);
+  console.log(time);
   const reference = ref(db, board + "/");
 
   const newItem = push(reference);

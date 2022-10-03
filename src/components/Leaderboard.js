@@ -14,6 +14,7 @@ import { CurrentLevelContext } from "../contexts/CurrentLevel";
 import { CurrentBoardContext } from "../contexts/CurrentBoard";
 import { displayArray, emptyData, getUserData } from "../utils/firebase";
 import { refreshData } from "../utils/dataRefresh";
+import { CurrentLeaderBoardContext } from "../contexts/CurrentLeaderBoardArray";
 
 const Leaderboard = (props) => {
   const { currentLevel, setCurrentLevel } = useContext(CurrentLevelContext);
@@ -24,11 +25,15 @@ const Leaderboard = (props) => {
   const [assortTwo, setAssortTwo] = useState(assortTwoData);
   const [room, setRoom] = useState(roomData);
   const [hoarder, setHoarder] = useState(hoarderData);
+  const newArray = JSON.parse(JSON.stringify(displayArray));
+  const { currentLeaderArray, setCurrentLeaderArray } = useContext(
+    CurrentLeaderBoardContext
+  );
 
-  const changeLevel = (level) => {
+  async function changeLevel(level) {
     if (level === "chess") {
+      await getUserData("Chess Scene");
       setCurrentLevel(chess);
-      getUserData("Chess Scene");
     } else if (level === "winter") {
       setCurrentLevel(winter);
       getUserData("Winter Scene");
@@ -46,8 +51,9 @@ const Leaderboard = (props) => {
       getUserData("Hoarder Scene");
     }
 
+    setCurrentLeaderArray(displayArray);
     changeHeader(level);
-  };
+  }
 
   function changeHeader(level) {
     if (level === "chess") {
@@ -94,8 +100,6 @@ const Leaderboard = (props) => {
       activateButton("room");
     }
   });
-
-  const newArray = JSON.parse(JSON.stringify(displayArray));
 
   return (
     <div id="leader-main">
@@ -150,13 +154,12 @@ const Leaderboard = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {newArray.map((value, key) => {
+                {currentLeaderArray.map((value, key) => {
                   return (
                     <tr key={key}>
                       <td>{key + 1}</td>
                       <td>{value.username}</td>
                       <td>{value.time}</td>
-                      {/* <td>seconds</td> */}
                     </tr>
                   );
                 })}

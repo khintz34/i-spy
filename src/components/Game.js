@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { CurrentLevelContext } from "../contexts/CurrentLevel";
 import "../styles/Game.css";
@@ -11,25 +11,34 @@ import {
   winterData,
 } from "../assets/data";
 import { CurrentBoardContext } from "../contexts/CurrentBoard";
-import { getUserData, writeUserData } from "../utils/firebase";
+import { writeUserData } from "../utils/firebase";
+import WinModal from "./WinModal";
 
 const Game = (props) => {
   let random = Math.floor(Math.random() * 1000);
-  let totalTime = 0;
-  const box = document.querySelector("#dropdown");
   const searchArray = props.search;
   // eslint-disable-next-line no-unused-vars
   const { currentLevel, setCurrentLevel } = useContext(CurrentLevelContext);
   // eslint-disable-next-line no-unused-vars
   const { currentBoard, setCurrentBoard } = useContext(CurrentBoardContext);
   const [iSpyList, setISpyList] = useState({});
-  let modal = document.querySelector("#winModal");
   const [user, setUser] = useState("");
   const [startTime, setStartTime] = useState(Math.floor(Date.now() / 1000));
   const [endTime, setEndTime] = useState(Math.floor(Date.now() / 1000));
-  console.log(startTime);
+  const [userLevel, setUserLevel] = useState("");
+  const [showStyle, setShowStyle] = useState("hidden");
+  const dropDownRef = useRef();
+  const userRef = useRef();
+  const modalRef = useRef();
 
   useEffect(() => {
+    // check to see if every item in list was found
+    if (Object.keys(iSpyList).length === searchArray.length) {
+      modalRef.current.style.display = "block";
+      setEndTime(Math.floor(Date.now() / 1000));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     // set class for any li with true to strike
 
     // eslint-disable-next-line no-unused-vars
@@ -38,27 +47,16 @@ const Game = (props) => {
       let item = document.querySelector(`#search-${classEdit}`);
       item.classList.add("strike");
     }
-  }, [iSpyList]);
-
-  useEffect(() => {
-    // check to see if every item in list was found
-    if (Object.keys(iSpyList).length === searchArray.length) {
-      modal.style.display = "block";
-      setEndTime(Math.floor(Date.now() / 1000));
-      totalTime = endTime - startTime;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [iSpyList]);
+  }, [iSpyList, searchArray.length]);
 
   function showList(e) {
-    const box = document.querySelector("#dropdown");
-    box.classList.remove("hidden");
-    box.style.top = e.clientY + 40 + "px";
-    box.style.left = e.clientX + 20 + "px";
+    setShowStyle("");
+    dropDownRef.current.style.top = e.clientY + 40 + "px";
+    dropDownRef.current.style.left = e.clientX + 20 + "px";
+  }
 
-    console.log(e.clientX);
-
-    // Might need to move the positioning based on where the click is
+  function hideList() {
+    setShowStyle("hidden");
   }
 
   function setToFound(item) {
@@ -70,33 +68,45 @@ const Game = (props) => {
     });
   }
 
-  async function submitModal() {
-    let userLevel;
+  function submitModal() {
+    setUserLevel("");
+    let userNameVal;
+    let userLevelVal;
 
     exitModal();
     if (searchArray[0] === "Matches") {
       setContexts(chessData, "Chess Scene");
-      userLevel = "Chess Scene";
+      setUserLevel("Chess Scene");
+      userLevelVal = "Chess Scene";
     } else if (searchArray[0] === "Kite") {
       setContexts(winterData, "Winter Scene");
-      userLevel = "Winter Scene";
+      setUserLevel("Winter Scene");
+      userLevelVal = "Winter Scene";
     } else if (searchArray[0] === "Blue Push Pin") {
       setContexts(assortOneData, "Assortment One");
-      userLevel = "Assortment One";
+      setUserLevel("Assortment One");
+      userLevelVal = "Assortment One";
     } else if (searchArray[0] === "Teeth") {
       setContexts(assortTwoData, "Assortment Two");
-      userLevel = "Assortment Two";
+      setUserLevel("Assortment Two");
+      userLevelVal = "Assortment Two";
     } else if (searchArray[0] === "Frog") {
       setContexts(roomData, "Room Scene");
-      userLevel = "Room Scene";
+      setUserLevel("Room Scene");
+      userLevelVal = "Room Scene";
     } else if (searchArray[0] === "Sugar") {
       setContexts(hoarderData, "Hoarder Scene");
-      userLevel = "Hoarder Scene";
+      setUserLevel("Hoarder Scene");
+      userLevelVal = "Hoarder Scene";
     }
 
-    const userName = document.querySelector("#userNameInput").value;
+    setUser(userRef.current.value);
+    userNameVal = userRef.current.value;
+    //
+    // writeUserData(userLevel, user, endTime - startTime);
 
-    await writeUserData(userLevel, userName, endTime - startTime);
+    // this one works... but I should be using the state val
+    writeUserData(userLevelVal, userNameVal, endTime - startTime);
   }
 
   function setContexts(level, board) {
@@ -105,19 +115,19 @@ const Game = (props) => {
   }
 
   function exitModal() {
-    modal.style.display = "none";
+    modalRef.current.style.display = "none";
     setISpyList({});
     for (let i = 0; i < searchArray.length; i++) {
       let classEdit = searchArray[i].replace(/\s+/g, "").toLowerCase();
       let item = document.querySelector(`#search-${classEdit}`);
       item.classList.remove("strike");
     }
-    box.classList.add("hidden");
+    setShowStyle("hidden");
   }
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function (event) {
-    if (event.target === modal) {
+    if (event.target === modalRef.current) {
       exitModal();
     }
   };
@@ -155,7 +165,7 @@ const Game = (props) => {
           showList(e);
         }}
       />
-      <div id="dropdown" className="hidden">
+      <div id="dropdown" className={showStyle} ref={dropDownRef}>
         <ul className="dropdownDiv">
           {(() => {
             const searches = [];
@@ -175,8 +185,11 @@ const Game = (props) => {
             return searches;
           })()}
         </ul>
+        <button id="dropDownExitBtn" onClick={hideList}>
+          X
+        </button>
       </div>
-      <div id="winModal" className="modal">
+      <div id="winModal" className="modal" ref={modalRef}>
         <div className="modal-content">
           <h1>
             Congrats! You finished in
@@ -192,6 +205,7 @@ const Game = (props) => {
             defaultValue={`userName-${random}`}
             id="userNameInput"
             maxLength="25"
+            ref={userRef}
           />
           <div className="gameBtnSetUp">
             <button onClick={exitModal} className="btnSize exitBtnColor">
@@ -205,6 +219,14 @@ const Game = (props) => {
           </div>
         </div>
       </div>
+      {/* <WinModal
+        modalRef={modalRef}
+        endTime={endTime}
+        startTime={startTime}
+        random={random}
+        exitModal={exitModal}
+        submitModal={submitModal}
+      /> */}
     </div>
   );
 };

@@ -25,10 +25,12 @@ import {
 } from "../src/assets/finderLists.js";
 import { winterData } from "./assets/data";
 import { getUserData } from "./utils/firebase";
+import { CurrentLeaderBoardContext } from "./contexts/CurrentLeaderBoardArray";
 
 function App() {
   const [currentLevel, setCurrentLevel] = useState([]);
   const [currentBoard, setCurrentBoard] = useState([]);
+  const [currentLeaderArray, setCurrentLeaderArray] = useState([]);
 
   function initLeaderBoards(dataList) {
     getUserData(dataList);
@@ -44,37 +46,41 @@ function App() {
             <CurrentBoardContext.Provider
               value={{ currentBoard, setCurrentBoard }}
             >
-              <Header />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route
-                  path="/game1"
-                  element={<Game img={levelOne} search={winterList} />}
-                />
-                <Route
-                  path="/game2"
-                  element={<Game img={levelTwo} search={chessList} />}
-                />
-                <Route
-                  path="/game3"
-                  element={<Game img={levelThree} search={assortOneList} />}
-                />
-                <Route
-                  path="/game4"
-                  element={<Game img={levelFour} search={assortTwoList} />}
-                />
-                <Route
-                  path="/game5"
-                  element={<Game img={levelFive} search={roomList} />}
-                />
-                <Route
-                  path="/game6"
-                  element={<Game img={levelSix} search={hoarderList} />}
-                />
-                <Route path="/leaderboard" element={<Leaderboard />} />
-                <Route path="/rules" element={<Rules />} />
-                <Route path="/about" element={<About />} />
-              </Routes>
+              <CurrentLeaderBoardContext.Provider
+                value={{ currentLeaderArray, setCurrentLeaderArray }}
+              >
+                <Header />
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route
+                    path="/game1"
+                    element={<Game img={levelOne} search={winterList} />}
+                  />
+                  <Route
+                    path="/game2"
+                    element={<Game img={levelTwo} search={chessList} />}
+                  />
+                  <Route
+                    path="/game3"
+                    element={<Game img={levelThree} search={assortOneList} />}
+                  />
+                  <Route
+                    path="/game4"
+                    element={<Game img={levelFour} search={assortTwoList} />}
+                  />
+                  <Route
+                    path="/game5"
+                    element={<Game img={levelFive} search={roomList} />}
+                  />
+                  <Route
+                    path="/game6"
+                    element={<Game img={levelSix} search={hoarderList} />}
+                  />
+                  <Route path="/leaderboard" element={<Leaderboard />} />
+                  <Route path="/rules" element={<Rules />} />
+                  <Route path="/about" element={<About />} />
+                </Routes>
+              </CurrentLeaderBoardContext.Provider>
             </CurrentBoardContext.Provider>
           </CurrentLevelContext.Provider>
         </div>
