@@ -30,9 +30,9 @@ const Leaderboard = (props) => {
     CurrentLeaderBoardContext
   );
 
-  async function changeLevel(level) {
+  function changeLevel(level) {
     if (level === "chess") {
-      await getUserData("Chess Scene");
+      getUserData("Chess Scene", chess);
       setCurrentLevel(chess);
     } else if (level === "winter") {
       setCurrentLevel(winter);
@@ -50,10 +50,14 @@ const Leaderboard = (props) => {
       setCurrentLevel(hoarder);
       getUserData("Hoarder Scene");
     }
-
     setCurrentLeaderArray(displayArray);
+
     changeHeader(level);
   }
+
+  useEffect(() => {
+    console.log(currentLeaderArray);
+  }, [currentLeaderArray]);
 
   function changeHeader(level) {
     if (level === "chess") {
@@ -99,7 +103,7 @@ const Leaderboard = (props) => {
     } else if (currentBoard === "Room Scene") {
       activateButton("room");
     }
-  });
+  }, [currentBoard, currentLeaderArray]);
 
   return (
     <div id="leader-main">

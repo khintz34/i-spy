@@ -43,7 +43,7 @@ export function writeUserData(board, name, time) {
   addData(board, obj);
 }
 
-export function getUserData(board) {
+export function getUserData(board, callback) {
   const boardRef = ref(db, board + "/");
   displayArray = [];
 
