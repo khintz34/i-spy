@@ -23,7 +23,6 @@ import {
   roomList,
   winterList,
 } from "../src/assets/finderLists.js";
-import { winterData } from "./assets/data";
 import { getUserData } from "./utils/firebase";
 import { CurrentLeaderBoardContext } from "./contexts/CurrentLeaderBoardArray";
 

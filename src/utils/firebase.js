@@ -23,13 +23,9 @@ const firebaseConfig = {
 
 const fireBaseApp = initializeApp(firebaseConfig);
 const db = getDatabase();
-let datasetName;
 export let displayArray = [];
 
 export function writeUserData(board, name, time) {
-  console.log(board);
-  console.log(name);
-  console.log(time);
   const reference = ref(db, board + "/");
 
   const newItem = push(reference);
@@ -43,7 +39,7 @@ export function writeUserData(board, name, time) {
   addData(board, obj);
 }
 
-export function getUserData(board, callback) {
+export function getUserData(board) {
   const boardRef = ref(db, board + "/");
   displayArray = [];
 

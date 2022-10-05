@@ -12,9 +12,8 @@ import {
 } from "../assets/data";
 import { CurrentLevelContext } from "../contexts/CurrentLevel";
 import { CurrentBoardContext } from "../contexts/CurrentBoard";
-import { displayArray, emptyData, getUserData } from "../utils/firebase";
-import { refreshData } from "../utils/dataRefresh";
 import { CurrentLeaderBoardContext } from "../contexts/CurrentLeaderBoardArray";
+import { getDatabase, ref, set, push, onValue, child } from "firebase/database";
 
 const Leaderboard = (props) => {
   const { currentLevel, setCurrentLevel } = useContext(CurrentLevelContext);
@@ -25,14 +24,63 @@ const Leaderboard = (props) => {
   const [assortTwo, setAssortTwo] = useState(assortTwoData);
   const [room, setRoom] = useState(roomData);
   const [hoarder, setHoarder] = useState(hoarderData);
-  const newArray = JSON.parse(JSON.stringify(displayArray));
+  const [levelTest, setLevelTest] = useState("");
   const { currentLeaderArray, setCurrentLeaderArray } = useContext(
     CurrentLeaderBoardContext
   );
+  const db = getDatabase();
+
+  let displayArray = [];
+
+  function writeUserData(board, name, time) {
+    const reference = ref(db, board + "/");
+
+    const newItem = push(reference);
+
+    set(newItem, {
+      username: name,
+      time: time,
+    });
+
+    let obj = { username: name, time: time };
+    addData(board, obj);
+  }
+
+  function getUserData(board) {
+    const boardRef = ref(db, board + "/");
+    displayArray = [];
+
+    onValue(
+      boardRef,
+      (snapshot) => {
+        snapshot.forEach((childSnapShot) => {
+          const childKey = childSnapShot.key;
+          const childData = childSnapShot.val();
+          let obj = { username: childData.username, time: childData.time };
+          addData(obj);
+        });
+      },
+      {
+        onlyOnce: false,
+      }
+    );
+  }
+
+  function addData(obj) {
+    displayArray.push(obj);
+    sortArray();
+  }
+
+  function sortArray() {
+    displayArray.sort((a, b) => {
+      return a.time - b.time;
+    });
+    setCurrentLeaderArray(displayArray);
+  }
 
   function changeLevel(level) {
     if (level === "chess") {
-      getUserData("Chess Scene", chess);
+      getUserData("Chess Scene");
       setCurrentLevel(chess);
     } else if (level === "winter") {
       setCurrentLevel(winter);
@@ -50,14 +98,18 @@ const Leaderboard = (props) => {
       setCurrentLevel(hoarder);
       getUserData("Hoarder Scene");
     }
-    setCurrentLeaderArray(displayArray);
 
     changeHeader(level);
   }
 
   useEffect(() => {
-    console.log(currentLeaderArray);
-  }, [currentLeaderArray]);
+    console.log("testing levelTest");
+  }, [levelTest]);
+
+  // useEffect(() => {
+  //   console.log(currentLeaderArray);
+  //   console.log("here");
+  // }, [currentLeaderArray]);
 
   function changeHeader(level) {
     if (level === "chess") {

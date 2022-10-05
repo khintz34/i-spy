@@ -31,6 +31,11 @@ const Game = (props) => {
   const userRef = useRef();
   const modalRef = useRef();
 
+  function checkLocation(e) {
+    console.log(e);
+    console.log("---------------");
+  }
+
   useEffect(() => {
     // check to see if every item in list was found
     if (Object.keys(iSpyList).length === searchArray.length) {
@@ -40,6 +45,7 @@ const Game = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
     // set class for any li with true to strike
+    console.log("here");
 
     // eslint-disable-next-line no-unused-vars
     for (let [key, value] of Object.entries(iSpyList)) {
@@ -47,12 +53,27 @@ const Game = (props) => {
       let item = document.querySelector(`#search-${classEdit}`);
       item.classList.add("strike");
     }
+
+    hideList();
   }, [iSpyList, searchArray.length]);
 
   function showList(e) {
     setShowStyle("");
-    dropDownRef.current.style.top = e.clientY + 40 + "px";
-    dropDownRef.current.style.left = e.clientX + 20 + "px";
+
+    if (e.clientY > 520) {
+      dropDownRef.current.style.top = e.clientY - 270 + "px";
+    } else {
+      dropDownRef.current.style.top = e.clientY + 40 + "px";
+    }
+
+    if (e.clientX > 720) {
+      dropDownRef.current.style.left = e.clientX - 300 + "px";
+    } else {
+      dropDownRef.current.style.left = e.clientX + 20 + "px";
+    }
+
+    console.log(`x: ${e.clientX}`);
+    console.log(`y: ${e.clientY}`);
   }
 
   function hideList() {
@@ -148,6 +169,9 @@ const Game = (props) => {
                   className="searchField"
                   id={`search-${classEdit}`}
                   key={`search-${searchArray[i]}`}
+                  onClick={(e) => {
+                    checkLocation(e);
+                  }}
                 >
                   {searchArray[i]}
                 </li>
@@ -219,14 +243,6 @@ const Game = (props) => {
           </div>
         </div>
       </div>
-      {/* <WinModal
-        modalRef={modalRef}
-        endTime={endTime}
-        startTime={startTime}
-        random={random}
-        exitModal={exitModal}
-        submitModal={submitModal}
-      /> */}
     </div>
   );
 };
