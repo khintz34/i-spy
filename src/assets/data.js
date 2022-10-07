@@ -1,6 +1,6 @@
 export const winterData = [];
 
-export let chessData = [];
+export const chessData = [];
 
 export const assortOneData = [];
 

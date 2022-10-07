@@ -10,16 +10,22 @@ import {
   roomData,
   winterData,
 } from "../assets/data";
+import {
+  ChessLocations,
+  WinterLocations,
+  AssortmentOneLocations,
+  AssortmentTwoLocations,
+  RoomLocations,
+  HoarderLocations,
+} from "../assets/locationList.js";
 import { CurrentBoardContext } from "../contexts/CurrentBoard";
-import { writeUserData } from "../utils/firebase";
-import WinModal from "./WinModal";
+import { db } from "../utils/firebase";
+import { getDatabase, ref, set, push } from "firebase/database";
 
 const Game = (props) => {
   let random = Math.floor(Math.random() * 1000);
   const searchArray = props.search;
-  // eslint-disable-next-line no-unused-vars
   const { currentLevel, setCurrentLevel } = useContext(CurrentLevelContext);
-  // eslint-disable-next-line no-unused-vars
   const { currentBoard, setCurrentBoard } = useContext(CurrentBoardContext);
   const [iSpyList, setISpyList] = useState({});
   const [user, setUser] = useState("");
@@ -31,10 +37,51 @@ const Game = (props) => {
   const userRef = useRef();
   const modalRef = useRef();
 
-  function checkLocation(e) {
-    console.log(e);
+  //this function was in firebase.js --> writing to Google Firebase
+  function writeUserData(board, name, time) {
+    let displayArray = [];
+    const reference = ref(db, board + "/");
+
+    const newItem = push(reference);
+
+    set(newItem, {
+      username: name,
+      time: time,
+    });
+
+    let obj = { username: name, time: time };
+    addData(board, obj);
+
+    function addData(obj) {
+      displayArray.push(obj);
+      sortArray();
+    }
+
+    function sortArray() {
+      displayArray.sort((a, b) => {
+        return a.time - b.time;
+      });
+    }
+  }
+
+  // ------------------------------------------
+  // testing location clicks
+  function checkLocation(e, searchItem) {
+    console.log(currentBoard);
+    if (currentBoard === "Winter Scene") {
+      WinterLocations.map((value, key) => {
+        console.log(WinterLocations[key]);
+        if (WinterLocations[key]["name"] === searchItem) {
+          console.log("yup");
+        }
+      });
+    }
+    console.log(e.clientX);
+    console.log(searchItem);
     console.log("---------------");
   }
+
+  //-------------------------------------------
 
   useEffect(() => {
     // check to see if every item in list was found
@@ -45,11 +92,10 @@ const Game = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
     // set class for any li with true to strike
-    console.log("here");
 
-    // eslint-disable-next-line no-unused-vars
     for (let [key, value] of Object.entries(iSpyList)) {
       let classEdit = key.replace(/\s+/g, "").toLowerCase();
+      // todo get rid of query selector
       let item = document.querySelector(`#search-${classEdit}`);
       item.classList.add("strike");
     }
@@ -59,6 +105,8 @@ const Game = (props) => {
 
   function showList(e) {
     setShowStyle("");
+
+    // move dropdown list depending on where the click is
 
     if (e.clientY > 520) {
       dropDownRef.current.style.top = e.clientY - 270 + "px";
@@ -72,8 +120,8 @@ const Game = (props) => {
       dropDownRef.current.style.left = e.clientX + 20 + "px";
     }
 
-    console.log(`x: ${e.clientX}`);
-    console.log(`y: ${e.clientY}`);
+    // console.log(`x: ${e.clientX}`);
+    // console.log(`y: ${e.clientY}`);
   }
 
   function hideList() {
@@ -140,6 +188,7 @@ const Game = (props) => {
     setISpyList({});
     for (let i = 0; i < searchArray.length; i++) {
       let classEdit = searchArray[i].replace(/\s+/g, "").toLowerCase();
+      // todo get rid of query selector
       let item = document.querySelector(`#search-${classEdit}`);
       item.classList.remove("strike");
     }
@@ -160,25 +209,18 @@ const Game = (props) => {
         <br />
         <br />
         <ul id="finderList">
-          {(() => {
-            const searches = [];
-            for (let i = 0; i < searchArray.length; i++) {
-              let classEdit = searchArray[i].replace(/\s+/g, "").toLowerCase();
-              searches.push(
-                <li
-                  className="searchField"
-                  id={`search-${classEdit}`}
-                  key={`search-${searchArray[i]}`}
-                  onClick={(e) => {
-                    checkLocation(e);
-                  }}
-                >
-                  {searchArray[i]}
-                </li>
-              );
-            }
-            return searches;
-          })()}
+          {searchArray.map((value, key) => {
+            let classEdit = searchArray[key].replace(/\s+/g, "").toLowerCase();
+            return (
+              <li
+                className="searchField"
+                id={`search-${classEdit}`}
+                key={`search-${searchArray[key]}`}
+              >
+                {searchArray[key]}
+              </li>
+            );
+          })}
         </ul>
       </div>
       <img
@@ -191,23 +233,20 @@ const Game = (props) => {
       />
       <div id="dropdown" className={showStyle} ref={dropDownRef}>
         <ul className="dropdownDiv">
-          {(() => {
-            const searches = [];
-            for (let i = 0; i < searchArray.length; i++) {
-              searches.push(
-                <li
-                  className="dropField"
-                  key={`search-${searchArray[i]}`}
-                  onClick={() => {
-                    setToFound(searchArray[i]);
-                  }}
-                >
-                  {searchArray[i]}
-                </li>
-              );
-            }
-            return searches;
-          })()}
+          {searchArray.map((value, key) => {
+            return (
+              <li
+                className="dropField"
+                key={`search-${searchArray[key]}`}
+                onClick={(e) => {
+                  setToFound(searchArray[key]);
+                  checkLocation(e, searchArray[key]);
+                }}
+              >
+                {searchArray[key]}
+              </li>
+            );
+          })}
         </ul>
         <button id="dropDownExitBtn" onClick={hideList}>
           X

@@ -22,50 +22,51 @@ const firebaseConfig = {
 };
 
 const fireBaseApp = initializeApp(firebaseConfig);
-const db = getDatabase();
-export let displayArray = [];
+export const db = getDatabase();
 
-export function writeUserData(board, name, time) {
-  const reference = ref(db, board + "/");
+// export let displayArray = [];
 
-  const newItem = push(reference);
+// export function writeUserData(board, name, time) {
+//   const reference = ref(db, board + "/");
 
-  set(newItem, {
-    username: name,
-    time: time,
-  });
+//   const newItem = push(reference);
 
-  let obj = { username: name, time: time };
-  addData(board, obj);
-}
+//   set(newItem, {
+//     username: name,
+//     time: time,
+//   });
 
-export function getUserData(board) {
-  const boardRef = ref(db, board + "/");
-  displayArray = [];
+//   let obj = { username: name, time: time };
+//   addData(board, obj);
+// }
 
-  onValue(
-    boardRef,
-    (snapshot) => {
-      snapshot.forEach((childSnapShot) => {
-        const childKey = childSnapShot.key;
-        const childData = childSnapShot.val();
-        let obj = { username: childData.username, time: childData.time };
-        addData(obj);
-      });
-    },
-    {
-      onlyOnce: false,
-    }
-  );
-}
+// export function getUserData(board) {
+//   const boardRef = ref(db, board + "/");
+//   displayArray = [];
 
-function addData(obj) {
-  displayArray.push(obj);
-  sortArray();
-}
+//   onValue(
+//     boardRef,
+//     (snapshot) => {
+//       snapshot.forEach((childSnapShot) => {
+//         const childKey = childSnapShot.key;
+//         const childData = childSnapShot.val();
+//         let obj = { username: childData.username, time: childData.time };
+//         addData(obj);
+//       });
+//     },
+//     {
+//       onlyOnce: false,
+//     }
+//   );
+// }
 
-function sortArray() {
-  displayArray.sort((a, b) => {
-    return a.time - b.time;
-  });
-}
+// function addData(obj) {
+//   displayArray.push(obj);
+//   sortArray();
+// }
+
+// function sortArray() {
+//   displayArray.sort((a, b) => {
+//     return a.time - b.time;
+//   });
+// }

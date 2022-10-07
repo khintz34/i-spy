@@ -1,3 +1,4 @@
+import React, { useContext } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Home from "./components/Home";
@@ -23,17 +24,12 @@ import {
   roomList,
   winterList,
 } from "../src/assets/finderLists.js";
-import { getUserData } from "./utils/firebase";
 import { CurrentLeaderBoardContext } from "./contexts/CurrentLeaderBoardArray";
 
 function App() {
   const [currentLevel, setCurrentLevel] = useState([]);
   const [currentBoard, setCurrentBoard] = useState([]);
   const [currentLeaderArray, setCurrentLeaderArray] = useState([]);
-
-  function initLeaderBoards(dataList) {
-    getUserData(dataList);
-  }
 
   return (
     <BrowserRouter>

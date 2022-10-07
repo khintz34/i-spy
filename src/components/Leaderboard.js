@@ -2,53 +2,48 @@
 import React, { useState, useContext, useEffect } from "react";
 import "../styles/Leaderboard.css";
 import LevelBtn from "./LevelBtn";
-import {
-  assortOneData,
-  assortTwoData,
-  chessData,
-  hoarderData,
-  roomData,
-  winterData,
-} from "../assets/data";
-import { CurrentLevelContext } from "../contexts/CurrentLevel";
 import { CurrentBoardContext } from "../contexts/CurrentBoard";
 import { CurrentLeaderBoardContext } from "../contexts/CurrentLeaderBoardArray";
 import { getDatabase, ref, set, push, onValue, child } from "firebase/database";
+import { db } from "../utils/firebase";
 
 const Leaderboard = (props) => {
-  const { currentLevel, setCurrentLevel } = useContext(CurrentLevelContext);
   const { currentBoard, setCurrentBoard } = useContext(CurrentBoardContext);
-  const [winter, setWinter] = useState(winterData);
-  const [chess, setChess] = useState(chessData);
-  const [assortOne, setAssortOne] = useState(assortOneData);
-  const [assortTwo, setAssortTwo] = useState(assortTwoData);
-  const [room, setRoom] = useState(roomData);
-  const [hoarder, setHoarder] = useState(hoarderData);
-  const [levelTest, setLevelTest] = useState("");
   const { currentLeaderArray, setCurrentLeaderArray } = useContext(
     CurrentLeaderBoardContext
   );
-  const db = getDatabase();
 
-  let displayArray = [];
+  // default to winter scene if blank
+  useEffect(() => {
+    if (currentBoard.length === 0) {
+      changeHeader("winter");
+      getUserData("Winter Scene");
+    }
+  }, []);
 
-  function writeUserData(board, name, time) {
-    const reference = ref(db, board + "/");
+  useEffect(() => {
+    if (currentBoard === "HoarderScene") {
+      activateButton("hoarder");
+    } else if (currentBoard === "Winter Scene") {
+      activateButton("winter");
+    } else if (currentBoard === "Chess Scene") {
+      activateButton("chess");
+    } else if (currentBoard === "Assortment One") {
+      activateButton("assortOne");
+    } else if (currentBoard === "Assortment Two") {
+      activateButton("assortTwo");
+    } else if (currentBoard === "Room Scene") {
+      activateButton("room");
+    }
+  }, [currentBoard, currentLeaderArray]);
 
-    const newItem = push(reference);
-
-    set(newItem, {
-      username: name,
-      time: time,
-    });
-
-    let obj = { username: name, time: time };
-    addData(board, obj);
-  }
+  //--------------------------------
+  // ! this was in firebase... where should this be??
+  // ---------------------
 
   function getUserData(board) {
     const boardRef = ref(db, board + "/");
-    displayArray = [];
+    let displayArray = [];
 
     onValue(
       boardRef,
@@ -64,52 +59,39 @@ const Leaderboard = (props) => {
         onlyOnce: false,
       }
     );
+
+    function addData(obj) {
+      displayArray.push(obj);
+      sortArray();
+    }
+
+    function sortArray() {
+      displayArray.sort((a, b) => {
+        return a.time - b.time;
+      });
+      setCurrentLeaderArray(displayArray);
+    }
   }
 
-  function addData(obj) {
-    displayArray.push(obj);
-    sortArray();
-  }
-
-  function sortArray() {
-    displayArray.sort((a, b) => {
-      return a.time - b.time;
-    });
-    setCurrentLeaderArray(displayArray);
-  }
+  //---------------------------------------
 
   function changeLevel(level) {
     if (level === "chess") {
       getUserData("Chess Scene");
-      setCurrentLevel(chess);
     } else if (level === "winter") {
-      setCurrentLevel(winter);
       getUserData("Winter Scene");
     } else if (level === "assortOne") {
-      setCurrentLevel(assortOne);
       getUserData("Assortment One");
     } else if (level === "assortTwo") {
-      setCurrentLevel(assortTwo);
       getUserData("Assortment Two");
     } else if (level === "room") {
-      setCurrentLevel(room);
       getUserData("Room Scene");
     } else if (level === "hoarder") {
-      setCurrentLevel(hoarder);
       getUserData("Hoarder Scene");
     }
 
     changeHeader(level);
   }
-
-  useEffect(() => {
-    console.log("testing levelTest");
-  }, [levelTest]);
-
-  // useEffect(() => {
-  //   console.log(currentLeaderArray);
-  //   console.log("here");
-  // }, [currentLeaderArray]);
 
   function changeHeader(level) {
     if (level === "chess") {
@@ -131,8 +113,11 @@ const Leaderboard = (props) => {
 
   function activateButton(level) {
     const idEdit = level.replace(/\s+/g, "").toLowerCase();
+
+    // todo get rid of query selector
     let newID = document.querySelector(`#${idEdit}`);
 
+    // TODO get rid of query selector
     let allBtns = document.querySelectorAll(".levelBtn");
     for (let i = 0; i < allBtns.length; i++) {
       allBtns[i].classList.remove("activeBtn");
@@ -140,22 +125,6 @@ const Leaderboard = (props) => {
 
     newID.classList.add("activeBtn");
   }
-
-  useEffect(() => {
-    if (currentBoard === "HoarderScene") {
-      activateButton("hoarder");
-    } else if (currentBoard === "Winter Scene") {
-      activateButton("winter");
-    } else if (currentBoard === "Chess Scene") {
-      activateButton("chess");
-    } else if (currentBoard === "Assortment One") {
-      activateButton("assortOne");
-    } else if (currentBoard === "Assortment Two") {
-      activateButton("assortTwo");
-    } else if (currentBoard === "Room Scene") {
-      activateButton("room");
-    }
-  }, [currentBoard, currentLeaderArray]);
 
   return (
     <div id="leader-main">
