@@ -1,3 +1,7 @@
+export const gameBoards = {
+  winterList: ["Kite", "Diamond Ring", "Hockey Stick", "Fish", "Car", "Book"],
+};
+
 export const winterList = [
   "Kite",
   "Diamond Ring",

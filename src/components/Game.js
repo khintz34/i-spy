@@ -28,14 +28,14 @@ const Game = (props) => {
   const { currentLevel, setCurrentLevel } = useContext(CurrentLevelContext);
   const { currentBoard, setCurrentBoard } = useContext(CurrentBoardContext);
   const [iSpyList, setISpyList] = useState({});
-  const [user, setUser] = useState("");
   const [startTime, setStartTime] = useState(Math.floor(Date.now() / 1000));
   const [endTime, setEndTime] = useState(Math.floor(Date.now() / 1000));
   const [userLevel, setUserLevel] = useState("");
   const [showStyle, setShowStyle] = useState("hidden");
   const dropDownRef = useRef();
-  const userRef = useRef();
   const modalRef = useRef();
+
+  const [username, setUsername] = useState();
 
   //this function was in firebase.js --> writing to Google Firebase
   function writeUserData(board, name, time) {
@@ -139,44 +139,39 @@ const Game = (props) => {
 
   function submitModal() {
     setUserLevel("");
-    let userNameVal;
-    let userLevelVal;
 
     exitModal();
     if (searchArray[0] === "Matches") {
       setContexts(chessData, "Chess Scene");
       setUserLevel("Chess Scene");
-      userLevelVal = "Chess Scene";
     } else if (searchArray[0] === "Kite") {
       setContexts(winterData, "Winter Scene");
       setUserLevel("Winter Scene");
-      userLevelVal = "Winter Scene";
     } else if (searchArray[0] === "Blue Push Pin") {
       setContexts(assortOneData, "Assortment One");
       setUserLevel("Assortment One");
-      userLevelVal = "Assortment One";
     } else if (searchArray[0] === "Teeth") {
       setContexts(assortTwoData, "Assortment Two");
       setUserLevel("Assortment Two");
-      userLevelVal = "Assortment Two";
     } else if (searchArray[0] === "Frog") {
       setContexts(roomData, "Room Scene");
       setUserLevel("Room Scene");
-      userLevelVal = "Room Scene";
     } else if (searchArray[0] === "Sugar") {
       setContexts(hoarderData, "Hoarder Scene");
       setUserLevel("Hoarder Scene");
-      userLevelVal = "Hoarder Scene";
+    }
+  }
+
+  useEffect(() => {
+    console.log(userLevel, username);
+    if (userLevel === "" || username === "") {
+      return;
     }
 
-    setUser(userRef.current.value);
-    userNameVal = userRef.current.value;
-    //
-    // writeUserData(userLevel, user, endTime - startTime);
+    console.log("writing data", userLevel, username, endTime - startTime);
 
-    // this one works... but I should be using the state val
-    writeUserData(userLevelVal, userNameVal, endTime - startTime);
-  }
+    writeUserData(userLevel, username, endTime - startTime);
+  }, [userLevel, username, endTime, startTime]);
 
   function setContexts(level, board) {
     setCurrentLevel(level);
@@ -268,7 +263,8 @@ const Game = (props) => {
             defaultValue={`userName-${random}`}
             id="userNameInput"
             maxLength="25"
-            ref={userRef}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
           <div className="gameBtnSetUp">
             <button onClick={exitModal} className="btnSize exitBtnColor">
