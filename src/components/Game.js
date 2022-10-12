@@ -17,7 +17,7 @@ import {
   AssortmentTwoLocations,
   RoomLocations,
   HoarderLocations,
-} from "../assets/locationList.js";
+} from "../assets/pixelOffsetList.js";
 import { CurrentBoardContext } from "../contexts/CurrentBoard";
 import { db } from "../utils/firebase";
 import { getDatabase, ref, set, push } from "firebase/database";
@@ -32,10 +32,14 @@ const Game = (props) => {
   const [endTime, setEndTime] = useState(Math.floor(Date.now() / 1000));
   const [userLevel, setUserLevel] = useState("");
   const [showStyle, setShowStyle] = useState("hidden");
+  const [xValue, setXValue] = useState(0);
+  const [yValue, setYValue] = useState(0);
+  const [offsetX, setOffsetX] = useState(0);
+  const [offsetY, setOffsetY] = useState(0);
   const dropDownRef = useRef();
   const modalRef = useRef();
 
-  const [username, setUsername] = useState();
+  const [username, setUsername] = useState("");
 
   //this function was in firebase.js --> writing to Google Firebase
   function writeUserData(board, name, time) {
@@ -64,25 +68,6 @@ const Game = (props) => {
     }
   }
 
-  // ------------------------------------------
-  // testing location clicks
-  function checkLocation(e, searchItem) {
-    console.log(currentBoard);
-    if (currentBoard === "Winter Scene") {
-      WinterLocations.map((value, key) => {
-        console.log(WinterLocations[key]);
-        if (WinterLocations[key]["name"] === searchItem) {
-          console.log("yup");
-        }
-      });
-    }
-    console.log(e.clientX);
-    console.log(searchItem);
-    console.log("---------------");
-  }
-
-  //-------------------------------------------
-
   useEffect(() => {
     // check to see if every item in list was found
     if (Object.keys(iSpyList).length === searchArray.length) {
@@ -106,6 +91,19 @@ const Game = (props) => {
   function showList(e) {
     setShowStyle("");
 
+    // set location of click
+    setXValue(e.clientX);
+    setYValue(e.clientY);
+
+    // set offsets
+    let bodyRect = document.body.getBoundingClientRect();
+    let elemRect = e.target.getBoundingClientRect();
+    let offsetLeft = elemRect.left - bodyRect.left;
+    let offsetTop = elemRect.top - bodyRect.top;
+
+    setOffsetX(offsetLeft);
+    setOffsetY(offsetTop);
+
     // move dropdown list depending on where the click is
 
     if (e.clientY > 520) {
@@ -119,13 +117,40 @@ const Game = (props) => {
     } else {
       dropDownRef.current.style.left = e.clientX + 20 + "px";
     }
-
-    // console.log(`x: ${e.clientX}`);
-    // console.log(`y: ${e.clientY}`);
   }
 
   function hideList() {
     setShowStyle("hidden");
+  }
+
+  // todo create a board key so this can be used on all the boards
+
+  function checkLocation(item) {
+    console.log("---Checking Location---");
+    if (currentBoard === "Winter Scene") {
+      WinterLocations.map((value, key) => {
+        if (WinterLocations[key]["name"] === item) {
+          console.log("new value: ", value.x, offsetX);
+          console.log("xVal: ", xValue);
+          if (
+            value.x + offsetX >= xValue - 50 &&
+            value.x + offsetX <= xValue + 50
+          ) {
+            if (
+              value.y + offsetY >= yValue - 50 &&
+              value.y + offsetY <= yValue + 50
+            ) {
+              console.log("---Setting to found---");
+              setToFound(item);
+            } else {
+              console.log("Wrong Item Clicked, wrong Y Value");
+            }
+          } else {
+            console.log("Wrong Item Clicked, wrong X Value");
+          }
+        }
+      });
+    }
   }
 
   function setToFound(item) {
@@ -138,44 +163,11 @@ const Game = (props) => {
   }
 
   function submitModal() {
-    setUserLevel("");
-
+    console.log("---SUBMIT MODAL---");
+    writeUserData(currentBoard, username, endTime - startTime);
+    console.log("writing data", currentBoard, username, endTime - startTime);
+    console.log("----------------");
     exitModal();
-    if (searchArray[0] === "Matches") {
-      setContexts(chessData, "Chess Scene");
-      setUserLevel("Chess Scene");
-    } else if (searchArray[0] === "Kite") {
-      setContexts(winterData, "Winter Scene");
-      setUserLevel("Winter Scene");
-    } else if (searchArray[0] === "Blue Push Pin") {
-      setContexts(assortOneData, "Assortment One");
-      setUserLevel("Assortment One");
-    } else if (searchArray[0] === "Teeth") {
-      setContexts(assortTwoData, "Assortment Two");
-      setUserLevel("Assortment Two");
-    } else if (searchArray[0] === "Frog") {
-      setContexts(roomData, "Room Scene");
-      setUserLevel("Room Scene");
-    } else if (searchArray[0] === "Sugar") {
-      setContexts(hoarderData, "Hoarder Scene");
-      setUserLevel("Hoarder Scene");
-    }
-  }
-
-  useEffect(() => {
-    console.log(userLevel, username);
-    if (userLevel === "" || username === "") {
-      return;
-    }
-
-    console.log("writing data", userLevel, username, endTime - startTime);
-
-    writeUserData(userLevel, username, endTime - startTime);
-  }, [userLevel, username, endTime, startTime]);
-
-  function setContexts(level, board) {
-    setCurrentLevel(level);
-    setCurrentBoard(board);
   }
 
   function exitModal() {
@@ -234,8 +226,8 @@ const Game = (props) => {
                 className="dropField"
                 key={`search-${searchArray[key]}`}
                 onClick={(e) => {
-                  setToFound(searchArray[key]);
-                  checkLocation(e, searchArray[key]);
+                  checkLocation(searchArray[key]);
+                  // checkLocation(e, searchArray[key]);
                 }}
               >
                 {searchArray[key]}
@@ -260,11 +252,12 @@ const Game = (props) => {
           <input
             type="text"
             placeholder="username"
-            defaultValue={`userName-${random}`}
             id="userNameInput"
             maxLength="25"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
           />
           <div className="gameBtnSetUp">
             <button onClick={exitModal} className="btnSize exitBtnColor">

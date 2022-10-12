@@ -21,6 +21,8 @@ const Leaderboard = (props) => {
     }
   }, []);
 
+  // todo set up a board key object to make this code look cleaner
+
   useEffect(() => {
     if (currentBoard === "HoarderScene") {
       activateButton("hoarder");
