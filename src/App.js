@@ -23,13 +23,16 @@ import {
   hoarderList,
   roomList,
   winterList,
+  gameBoards,
 } from "../src/assets/finderLists.js";
+// todo update these to just gameBoards
 import { CurrentLeaderBoardContext } from "./contexts/CurrentLeaderBoardArray";
 
 function App() {
   const [currentLevel, setCurrentLevel] = useState([]);
   const [currentBoard, setCurrentBoard] = useState([]);
   const [currentLeaderArray, setCurrentLeaderArray] = useState([]);
+  console.log(gameBoards["winterList"]);
 
   return (
     <BrowserRouter>
@@ -47,6 +50,7 @@ function App() {
                 <Header />
                 <Routes>
                   <Route path="/" element={<Home />} />
+                  {/* todo updated search={gameBoards[winterList]} */}
                   <Route
                     path="/game1"
                     element={<Game img={levelOne} search={winterList} />}

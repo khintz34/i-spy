@@ -1,14 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection } from "firebase/firestore";
 import { getDatabase, ref, set, push, onValue, child } from "firebase/database";
-import {
-  assortOneData,
-  assortTwoData,
-  chessData,
-  hoarderData,
-  roomData,
-  winterData,
-} from "../assets/data";
 import { useContext } from "react";
 
 const firebaseConfig = {

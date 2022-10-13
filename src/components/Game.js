@@ -2,44 +2,25 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { CurrentLevelContext } from "../contexts/CurrentLevel";
 import "../styles/Game.css";
-import {
-  assortOneData,
-  assortTwoData,
-  chessData,
-  hoarderData,
-  roomData,
-  winterData,
-} from "../assets/data";
-import {
-  ChessLocations,
-  WinterLocations,
-  AssortmentOneLocations,
-  AssortmentTwoLocations,
-  RoomLocations,
-  HoarderLocations,
-} from "../assets/pixelOffsetList.js";
+import { LocationList } from "../assets/pixelOffsetList.js";
 import { CurrentBoardContext } from "../contexts/CurrentBoard";
 import { db } from "../utils/firebase";
 import { getDatabase, ref, set, push } from "firebase/database";
 
 const Game = (props) => {
-  let random = Math.floor(Math.random() * 1000);
   const searchArray = props.search;
-  const { currentLevel, setCurrentLevel } = useContext(CurrentLevelContext);
   const { currentBoard, setCurrentBoard } = useContext(CurrentBoardContext);
   const [iSpyList, setISpyList] = useState({});
   const [startTime, setStartTime] = useState(Math.floor(Date.now() / 1000));
   const [endTime, setEndTime] = useState(Math.floor(Date.now() / 1000));
-  const [userLevel, setUserLevel] = useState("");
   const [showStyle, setShowStyle] = useState("hidden");
   const [xValue, setXValue] = useState(0);
   const [yValue, setYValue] = useState(0);
   const [offsetX, setOffsetX] = useState(0);
   const [offsetY, setOffsetY] = useState(0);
+  const [username, setUsername] = useState("");
   const dropDownRef = useRef();
   const modalRef = useRef();
-
-  const [username, setUsername] = useState("");
 
   //this function was in firebase.js --> writing to Google Firebase
   function writeUserData(board, name, time) {
@@ -123,34 +104,41 @@ const Game = (props) => {
     setShowStyle("hidden");
   }
 
-  // todo create a board key so this can be used on all the boards
+  const LocationKey = {
+    "Winter Scene": "WinterLocations",
+    "Chess Scene": "ChessLocations",
+    "Assortment One": "AssortmentOneLocations",
+    "Assortment Two": "AssortmentTwoLocations",
+    "Room Scene": "RoomLocations",
+    "Hoarder Scene": "HoarderLocations",
+  };
 
   function checkLocation(item) {
     console.log("---Checking Location---");
-    if (currentBoard === "Winter Scene") {
-      WinterLocations.map((value, key) => {
-        if (WinterLocations[key]["name"] === item) {
-          console.log("new value: ", value.x, offsetX);
-          console.log("xVal: ", xValue);
+    const ListKey = LocationKey[currentBoard];
+    const LocationListMap = LocationList[ListKey];
+    LocationListMap.map((value, key) => {
+      if (LocationListMap[key]["name"] === item) {
+        console.log("new value: ", value.x, offsetX);
+        console.log("xVal: ", xValue);
+        if (
+          value.x + offsetX >= xValue - 50 &&
+          value.x + offsetX <= xValue + 50
+        ) {
           if (
-            value.x + offsetX >= xValue - 50 &&
-            value.x + offsetX <= xValue + 50
+            value.y + offsetY >= yValue - 50 &&
+            value.y + offsetY <= yValue + 50
           ) {
-            if (
-              value.y + offsetY >= yValue - 50 &&
-              value.y + offsetY <= yValue + 50
-            ) {
-              console.log("---Setting to found---");
-              setToFound(item);
-            } else {
-              console.log("Wrong Item Clicked, wrong Y Value");
-            }
+            console.log("---Setting to found---");
+            setToFound(item);
           } else {
-            console.log("Wrong Item Clicked, wrong X Value");
+            console.log("Wrong Item Clicked, wrong Y Value");
           }
+        } else {
+          console.log("Wrong Item Clicked, wrong X Value");
         }
-      });
-    }
+      }
+    });
   }
 
   function setToFound(item) {
@@ -227,7 +215,6 @@ const Game = (props) => {
                 key={`search-${searchArray[key]}`}
                 onClick={(e) => {
                   checkLocation(searchArray[key]);
-                  // checkLocation(e, searchArray[key]);
                 }}
               >
                 {searchArray[key]}

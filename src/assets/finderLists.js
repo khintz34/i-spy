@@ -1,5 +1,41 @@
 export const gameBoards = {
   winterList: ["Kite", "Diamond Ring", "Hockey Stick", "Fish", "Car", "Book"],
+  chessList: ["Matches", "Number Three", "Lit Candle", "Letter"],
+  assortOneList: [
+    "Blue Push Pin",
+    "Fish",
+    "Alien",
+    "Triceratops",
+    "Snail",
+    "Blue Umbrella",
+  ],
+  assortTwoList: [
+    "Teeth",
+    "Blue Sunglasses",
+    "Letter K",
+    "Star Fish",
+    "Shuttle Cock",
+    "Zerba Stripes",
+    "Corgi",
+  ],
+  roomList: [
+    "Frog",
+    "Soccer Player",
+    "Cat",
+    "Red Ribbon",
+    "Belt",
+    "Cell Phone",
+    "Lemon",
+  ],
+  hoarderList: [
+    "Sugar",
+    "Spoon",
+    "Car",
+    "Rooster",
+    "Pencil Sharpener",
+    "Pearls",
+    "Air Plane",
+  ],
 };
 
 export const winterList = [

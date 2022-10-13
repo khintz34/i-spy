@@ -182,6 +182,7 @@ const Leaderboard = (props) => {
               </thead>
               <tbody>
                 {currentLeaderArray.map((value, key) => {
+                  console.log(value);
                   return (
                     <tr key={key}>
                       <td>{key + 1}</td>
