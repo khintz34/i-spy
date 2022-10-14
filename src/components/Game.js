@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { CurrentLevelContext } from "../contexts/CurrentLevel";
 import "../styles/Game.css";
-import { LocationList } from "../assets/pixelOffsetList.js";
+import { LocationPercentList } from "../assets/percentOffsetList";
 import { CurrentBoardContext } from "../contexts/CurrentBoard";
 import { db } from "../utils/firebase";
-import { getDatabase, ref, set, push } from "firebase/database";
+import { ref, set, push } from "firebase/database";
 
 const Game = (props) => {
   const searchArray = props.search;
@@ -19,6 +18,8 @@ const Game = (props) => {
   const [offsetX, setOffsetX] = useState(0);
   const [offsetY, setOffsetY] = useState(0);
   const [username, setUsername] = useState("");
+  const [imgHeight, setImgheight] = useState(0);
+  const [imgWidth, setImgWidth] = useState(0);
   const dropDownRef = useRef();
   const modalRef = useRef();
 
@@ -85,15 +86,33 @@ const Game = (props) => {
     setOffsetX(offsetLeft);
     setOffsetY(offsetTop);
 
+    //set img Height and Width
+    setImgWidth(e.target.clientWidth);
+    setImgheight(e.target.clientHeight);
+
+    // todo finish new % click method
+    // testing click / img %s
+    // console.log("click", e.clientX);
+    // console.log("offset: ", offsetLeft);
+    // console.log("img width", e.target.clientWidth);
+    // console.log(
+    //   "percantageX: ",
+    //   (e.clientX - offsetLeft) / e.target.clientWidth
+    // );
+    // console.log(
+    //   "percantageY: ",
+    //   (e.clientY - offsetTop) / e.target.clientHeight
+    // );
+
     // move dropdown list depending on where the click is
 
-    if (e.clientY > 520) {
+    if (e.clientY - offsetTop > e.target.clientHeight / 2) {
       dropDownRef.current.style.top = e.clientY - 270 + "px";
     } else {
       dropDownRef.current.style.top = e.clientY + 40 + "px";
     }
 
-    if (e.clientX > 720) {
+    if (e.clientX - offsetLeft > e.target.clientWidth / 2) {
       dropDownRef.current.style.left = e.clientX - 300 + "px";
     } else {
       dropDownRef.current.style.left = e.clientX + 20 + "px";
@@ -116,18 +135,16 @@ const Game = (props) => {
   function checkLocation(item) {
     console.log("---Checking Location---");
     const ListKey = LocationKey[currentBoard];
-    const LocationListMap = LocationList[ListKey];
+    const LocationListMap = LocationPercentList[ListKey];
     LocationListMap.map((value, key) => {
       if (LocationListMap[key]["name"] === item) {
-        console.log("new value: ", value.x, offsetX);
-        console.log("xVal: ", xValue);
         if (
-          value.x + offsetX >= xValue - 50 &&
-          value.x + offsetX <= xValue + 50
+          value.x * imgWidth + offsetX >= xValue - imgWidth * 0.05 &&
+          value.x * imgWidth + offsetX <= xValue + imgWidth * 0.05
         ) {
           if (
-            value.y + offsetY >= yValue - 50 &&
-            value.y + offsetY <= yValue + 50
+            value.y * imgHeight + offsetY >= yValue - imgHeight * 0.05 &&
+            value.y * imgHeight + offsetY <= yValue + imgHeight * 0.05
           ) {
             console.log("---Setting to found---");
             setToFound(item);

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Home from "./components/Home";
@@ -14,25 +14,14 @@ import Leaderboard from "./components/Leaderboard";
 import Rules from "./components/Rules";
 import About from "./components/About";
 import { CurrentLevelContext } from "./contexts/CurrentLevel";
-import { useState } from "react";
 import { CurrentBoardContext } from "./contexts/CurrentBoard";
-import {
-  assortOneList,
-  assortTwoList,
-  chessList,
-  hoarderList,
-  roomList,
-  winterList,
-  gameBoards,
-} from "../src/assets/finderLists.js";
-// todo update these to just gameBoards
+import { gameBoards } from "../src/assets/finderLists.js";
 import { CurrentLeaderBoardContext } from "./contexts/CurrentLeaderBoardArray";
 
 function App() {
   const [currentLevel, setCurrentLevel] = useState([]);
   const [currentBoard, setCurrentBoard] = useState([]);
   const [currentLeaderArray, setCurrentLeaderArray] = useState([]);
-  console.log(gameBoards["winterList"]);
 
   return (
     <BrowserRouter>
@@ -50,30 +39,47 @@ function App() {
                 <Header />
                 <Routes>
                   <Route path="/" element={<Home />} />
-                  {/* todo updated search={gameBoards[winterList]} */}
                   <Route
                     path="/game1"
-                    element={<Game img={levelOne} search={winterList} />}
+                    element={
+                      <Game img={levelOne} search={gameBoards["winterList"]} />
+                    }
                   />
                   <Route
                     path="/game2"
-                    element={<Game img={levelTwo} search={chessList} />}
+                    element={
+                      <Game img={levelTwo} search={gameBoards["chessList"]} />
+                    }
                   />
                   <Route
                     path="/game3"
-                    element={<Game img={levelThree} search={assortOneList} />}
+                    element={
+                      <Game
+                        img={levelThree}
+                        search={gameBoards["assortOneList"]}
+                      />
+                    }
                   />
                   <Route
                     path="/game4"
-                    element={<Game img={levelFour} search={assortTwoList} />}
+                    element={
+                      <Game
+                        img={levelFour}
+                        search={gameBoards["assortTwoList"]}
+                      />
+                    }
                   />
                   <Route
                     path="/game5"
-                    element={<Game img={levelFive} search={roomList} />}
+                    element={
+                      <Game img={levelFive} search={gameBoards["roomList"]} />
+                    }
                   />
                   <Route
                     path="/game6"
-                    element={<Game img={levelSix} search={hoarderList} />}
+                    element={
+                      <Game img={levelSix} search={gameBoards["hoarderList"]} />
+                    }
                   />
                   <Route path="/leaderboard" element={<Leaderboard />} />
                   <Route path="/rules" element={<Rules />} />

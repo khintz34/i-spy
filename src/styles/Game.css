@@ -8,8 +8,9 @@
 }
 
 .gameFull {
-  height: 758px;
+  height: 90vh;
   z-index: 2;
+  overflow: auto;
 }
 
 .gameFull:hover {
@@ -17,7 +18,7 @@
 }
 
 #finderDiv {
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 10vh;
   width: 20vw;
@@ -26,6 +27,7 @@
   height: 90vh;
   margin-right: 2vw;
   padding-top: 3vh;
+  z-index: 2;
 }
 
 .finderList {
@@ -60,8 +62,8 @@
 #dropdown {
   background-color: black;
   position: absolute;
-  top: 10vh;
-  left: 10vw;
+  top: 45vh;
+  left: 80vw;
   width: 22vw;
   text-align: center;
   border-radius: 10px;
