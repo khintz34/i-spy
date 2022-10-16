@@ -9,25 +9,31 @@
 
 .gameFull {
   height: 90vh;
-  z-index: 2;
+  width: auto;
+  /* z-index: 2; */
   overflow: auto;
+  flex-shrink: 0;
 }
 
 .gameFull:hover {
   cursor: pointer;
 }
 
+#imgHolder {
+  width: 80vw;
+  display: flex;
+  justify-content: center;
+}
+
 #finderDiv {
-  position: absolute;
-  left: 0;
-  top: 10vh;
   width: 20vw;
-  min-width: 240px;
   background-color: #e0e0e0;
   height: 90vh;
-  margin-right: 2vw;
-  padding-top: 3vh;
-  z-index: 2;
+  margin-right: auto;
+  padding-top: 5vh;
+  text-align: left;
+  overflow: auto;
+  /* z-index: 2; */
 }
 
 .finderList {
@@ -57,6 +63,7 @@
   list-style-type: none;
   margin-bottom: 10px;
   margin-top: 10px;
+  min-width: 150px;
 }
 
 #dropdown {
@@ -181,4 +188,8 @@
 #dropDownExitBtn:hover {
   background-color: white;
   color: red;
+}
+
+ul {
+  padding-left: 2vw;
 }

@@ -8,6 +8,10 @@ import { ref, set, push } from "firebase/database";
 
 const Game = (props) => {
   const searchArray = props.search;
+  // const searchArray = props.search.map((value, key) => {
+  //   return [value.name];
+  // });
+  console.log(searchArray);
   const { currentBoard, setCurrentBoard } = useContext(CurrentBoardContext);
   const [iSpyList, setISpyList] = useState({});
   const [startTime, setStartTime] = useState(Math.floor(Date.now() / 1000));
@@ -90,19 +94,8 @@ const Game = (props) => {
     setImgWidth(e.target.clientWidth);
     setImgheight(e.target.clientHeight);
 
-    // todo finish new % click method
-    // testing click / img %s
-    // console.log("click", e.clientX);
-    // console.log("offset: ", offsetLeft);
-    // console.log("img width", e.target.clientWidth);
-    // console.log(
-    //   "percantageX: ",
-    //   (e.clientX - offsetLeft) / e.target.clientWidth
-    // );
-    // console.log(
-    //   "percantageY: ",
-    //   (e.clientY - offsetTop) / e.target.clientHeight
-    // );
+    console.log((e.clientX - offsetLeft) / e.target.clientWidth);
+    console.log((e.clientY - offsetTop) / e.target.clientHeight);
 
     // move dropdown list depending on where the click is
 
@@ -134,9 +127,13 @@ const Game = (props) => {
 
   function checkLocation(item) {
     console.log("---Checking Location---");
+
     const ListKey = LocationKey[currentBoard];
+    console.log(currentBoard);
     const LocationListMap = LocationPercentList[ListKey];
     LocationListMap.map((value, key) => {
+      console.log(LocationListMap[key]["name"]);
+      console.log(item);
       if (LocationListMap[key]["name"] === item) {
         if (
           value.x * imgWidth + offsetX >= xValue - imgWidth * 0.05 &&
@@ -195,34 +192,42 @@ const Game = (props) => {
   };
 
   return (
-    <div id="gameHolder">
-      <div id="finderDiv">
-        <h2>I Spy List: </h2>
-        <br />
-        <br />
-        <ul id="finderList">
-          {searchArray.map((value, key) => {
-            let classEdit = searchArray[key].replace(/\s+/g, "").toLowerCase();
-            return (
-              <li
-                className="searchField"
-                id={`search-${classEdit}`}
-                key={`search-${searchArray[key]}`}
-              >
-                {searchArray[key]}
-              </li>
-            );
-          })}
-        </ul>
+    <div>
+      <div id="gameHolder">
+        <div id="finderDiv">
+          <h2 style={{ paddingLeft: "2vw" }}>I Spy List: </h2>
+          <br />
+          <br />
+          <ul id="finderList">
+            {searchArray.map((value, key) => {
+              let classEdit = searchArray[key]
+                .replace(/\s+/g, "")
+                .toLowerCase();
+              return (
+                <li
+                  className="searchField"
+                  // todo: className={`searchField ${value.found ? "strike" : ""}`}
+                  // className={``}
+                  id={`search-${classEdit}`}
+                  key={`search-${searchArray[key]}`}
+                >
+                  {searchArray[key]}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div id="imgHolder">
+          <img
+            src={props.img}
+            alt=""
+            className="gameFull"
+            onClick={(e) => {
+              showList(e);
+            }}
+          />
+        </div>
       </div>
-      <img
-        src={props.img}
-        alt=""
-        className="gameFull"
-        onClick={(e) => {
-          showList(e);
-        }}
-      />
       <div id="dropdown" className={showStyle} ref={dropDownRef}>
         <ul className="dropdownDiv">
           {searchArray.map((value, key) => {

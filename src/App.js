@@ -17,6 +17,7 @@ import { CurrentLevelContext } from "./contexts/CurrentLevel";
 import { CurrentBoardContext } from "./contexts/CurrentBoard";
 import { gameBoards } from "../src/assets/finderLists.js";
 import { CurrentLeaderBoardContext } from "./contexts/CurrentLeaderBoardArray";
+import { LocationPercentList } from "./assets/percentOffsetList";
 
 function App() {
   const [currentLevel, setCurrentLevel] = useState([]);
@@ -42,13 +43,27 @@ function App() {
                   <Route
                     path="/game1"
                     element={
-                      <Game img={levelOne} search={gameBoards["winterList"]} />
+                      <Game
+                        img={levelOne}
+                        search={LocationPercentList["WinterLocations"].map(
+                          (value, key) => {
+                            return value.name;
+                          }
+                        )}
+                      />
                     }
                   />
                   <Route
                     path="/game2"
                     element={
-                      <Game img={levelTwo} search={gameBoards["chessList"]} />
+                      <Game
+                        img={levelTwo}
+                        search={LocationPercentList["ChessLocations"].map(
+                          (value, key) => {
+                            return value.name;
+                          }
+                        )}
+                      />
                     }
                   />
                   <Route
@@ -56,7 +71,11 @@ function App() {
                     element={
                       <Game
                         img={levelThree}
-                        search={gameBoards["assortOneList"]}
+                        search={LocationPercentList[
+                          "AssortmentOneLocations"
+                        ].map((value, key) => {
+                          return value.name;
+                        })}
                       />
                     }
                   />
@@ -65,20 +84,38 @@ function App() {
                     element={
                       <Game
                         img={levelFour}
-                        search={gameBoards["assortTwoList"]}
+                        search={LocationPercentList[
+                          "AssortmentTwoLocations"
+                        ].map((value, key) => {
+                          return value.name;
+                        })}
                       />
                     }
                   />
                   <Route
                     path="/game5"
                     element={
-                      <Game img={levelFive} search={gameBoards["roomList"]} />
+                      <Game
+                        img={levelFive}
+                        search={LocationPercentList["RoomLocations"].map(
+                          (value, key) => {
+                            return value.name;
+                          }
+                        )}
+                      />
                     }
                   />
                   <Route
                     path="/game6"
                     element={
-                      <Game img={levelSix} search={gameBoards["hoarderList"]} />
+                      <Game
+                        img={levelSix}
+                        search={LocationPercentList["HoarderLocations"].map(
+                          (value, key) => {
+                            return value.name;
+                          }
+                        )}
+                      />
                     }
                   />
                   <Route path="/leaderboard" element={<Leaderboard />} />

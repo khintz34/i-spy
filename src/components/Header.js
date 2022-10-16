@@ -12,7 +12,12 @@ const Header = () => {
           <h1>I Spy: The Interactive Game</h1>
         </Link>
       </div>
-      <Sidebar pageWrapId={"page-wrap"} outerContainerId={"outer-container"} />
+      <div id="sidebarDivHolder">
+        <Sidebar
+          pageWrapId={"page-wrap"}
+          outerContainerId={"outer-container"}
+        />
+      </div>
     </header>
   );
 };
