@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, Prompt } from "react-router-dom";
 import "../styles/Game.css";
 import { LocationPercentList } from "../assets/percentOffsetList";
 import { CurrentBoardContext } from "../contexts/CurrentBoard";
@@ -7,11 +7,9 @@ import { db } from "../utils/firebase";
 import { ref, set, push } from "firebase/database";
 
 const Game = (props) => {
-  const searchArray = props.search;
-  // const searchArray = props.search.map((value, key) => {
-  //   return [value.name];
-  // });
-  console.log(searchArray);
+  const searchArray = props.search.map((value, key) => {
+    return value.name;
+  });
   const { currentBoard, setCurrentBoard } = useContext(CurrentBoardContext);
   const [iSpyList, setISpyList] = useState({});
   const [startTime, setStartTime] = useState(Math.floor(Date.now() / 1000));
@@ -27,9 +25,16 @@ const Game = (props) => {
   const dropDownRef = useRef();
   const modalRef = useRef();
 
+  useEffect(() => {
+    return () => {
+      props.search.map((value, key) => {
+        value.found = false;
+      });
+    };
+  }, []);
+
   //this function was in firebase.js --> writing to Google Firebase
   function writeUserData(board, name, time) {
-    let displayArray = [];
     const reference = ref(db, board + "/");
 
     const newItem = push(reference);
@@ -38,20 +43,6 @@ const Game = (props) => {
       username: name,
       time: time,
     });
-
-    let obj = { username: name, time: time };
-    addData(board, obj);
-
-    function addData(obj) {
-      displayArray.push(obj);
-      sortArray();
-    }
-
-    function sortArray() {
-      displayArray.sort((a, b) => {
-        return a.time - b.time;
-      });
-    }
   }
 
   useEffect(() => {
@@ -61,15 +52,6 @@ const Game = (props) => {
       setEndTime(Math.floor(Date.now() / 1000));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-
-    // set class for any li with true to strike
-
-    for (let [key, value] of Object.entries(iSpyList)) {
-      let classEdit = key.replace(/\s+/g, "").toLowerCase();
-      // todo get rid of query selector
-      let item = document.querySelector(`#search-${classEdit}`);
-      item.classList.add("strike");
-    }
 
     hideList();
   }, [iSpyList, searchArray.length]);
@@ -93,9 +75,6 @@ const Game = (props) => {
     //set img Height and Width
     setImgWidth(e.target.clientWidth);
     setImgheight(e.target.clientHeight);
-
-    console.log((e.clientX - offsetLeft) / e.target.clientWidth);
-    console.log((e.clientY - offsetTop) / e.target.clientHeight);
 
     // move dropdown list depending on where the click is
 
@@ -132,8 +111,6 @@ const Game = (props) => {
     console.log(currentBoard);
     const LocationListMap = LocationPercentList[ListKey];
     LocationListMap.map((value, key) => {
-      console.log(LocationListMap[key]["name"]);
-      console.log(item);
       if (LocationListMap[key]["name"] === item) {
         if (
           value.x * imgWidth + offsetX >= xValue - imgWidth * 0.05 &&
@@ -145,6 +122,8 @@ const Game = (props) => {
           ) {
             console.log("---Setting to found---");
             setToFound(item);
+            LocationListMap[key]["found"] = true;
+            console.log(LocationListMap[key]["found"]);
           } else {
             console.log("Wrong Item Clicked, wrong Y Value");
           }
@@ -175,12 +154,10 @@ const Game = (props) => {
   function exitModal() {
     modalRef.current.style.display = "none";
     setISpyList({});
-    for (let i = 0; i < searchArray.length; i++) {
-      let classEdit = searchArray[i].replace(/\s+/g, "").toLowerCase();
-      // todo get rid of query selector
-      let item = document.querySelector(`#search-${classEdit}`);
-      item.classList.remove("strike");
-    }
+
+    props.search.map((value, key) => {
+      value.found = false;
+    });
     setShowStyle("hidden");
   }
 
@@ -199,15 +176,13 @@ const Game = (props) => {
           <br />
           <br />
           <ul id="finderList">
-            {searchArray.map((value, key) => {
+            {props.search.map((value, key) => {
               let classEdit = searchArray[key]
                 .replace(/\s+/g, "")
                 .toLowerCase();
               return (
                 <li
-                  className="searchField"
-                  // todo: className={`searchField ${value.found ? "strike" : ""}`}
-                  // className={``}
+                  className={`searchField ${value.found ? "strike" : ""}`}
                   id={`search-${classEdit}`}
                   key={`search-${searchArray[key]}`}
                 >
@@ -230,7 +205,7 @@ const Game = (props) => {
       </div>
       <div id="dropdown" className={showStyle} ref={dropDownRef}>
         <ul className="dropdownDiv">
-          {searchArray.map((value, key) => {
+          {props.search.map((value, key) => {
             return (
               <li
                 className="dropField"

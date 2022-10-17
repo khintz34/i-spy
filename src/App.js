@@ -15,7 +15,6 @@ import Rules from "./components/Rules";
 import About from "./components/About";
 import { CurrentLevelContext } from "./contexts/CurrentLevel";
 import { CurrentBoardContext } from "./contexts/CurrentBoard";
-import { gameBoards } from "../src/assets/finderLists.js";
 import { CurrentLeaderBoardContext } from "./contexts/CurrentLeaderBoardArray";
 import { LocationPercentList } from "./assets/percentOffsetList";
 
@@ -45,9 +44,10 @@ function App() {
                     element={
                       <Game
                         img={levelOne}
+                        //todo update each game like this one
                         search={LocationPercentList["WinterLocations"].map(
                           (value, key) => {
-                            return value.name;
+                            return value;
                           }
                         )}
                       />
@@ -60,7 +60,7 @@ function App() {
                         img={levelTwo}
                         search={LocationPercentList["ChessLocations"].map(
                           (value, key) => {
-                            return value.name;
+                            return value;
                           }
                         )}
                       />
@@ -74,7 +74,7 @@ function App() {
                         search={LocationPercentList[
                           "AssortmentOneLocations"
                         ].map((value, key) => {
-                          return value.name;
+                          return value;
                         })}
                       />
                     }
@@ -87,7 +87,7 @@ function App() {
                         search={LocationPercentList[
                           "AssortmentTwoLocations"
                         ].map((value, key) => {
-                          return value.name;
+                          return value;
                         })}
                       />
                     }
@@ -99,7 +99,7 @@ function App() {
                         img={levelFive}
                         search={LocationPercentList["RoomLocations"].map(
                           (value, key) => {
-                            return value.name;
+                            return value;
                           }
                         )}
                       />
@@ -112,7 +112,7 @@ function App() {
                         img={levelSix}
                         search={LocationPercentList["HoarderLocations"].map(
                           (value, key) => {
-                            return value.name;
+                            return value;
                           }
                         )}
                       />

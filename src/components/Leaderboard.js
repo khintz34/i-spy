@@ -16,32 +16,19 @@ const Leaderboard = (props) => {
   // default to winter scene if blank
   useEffect(() => {
     if (currentBoard.length === 0) {
-      changeHeader("winter");
+      changeLevel("winter");
       getUserData("Winter Scene");
     }
   }, []);
 
-  // todo set up a board key object to make this code look cleaner
-
-  useEffect(() => {
-    if (currentBoard === "HoarderScene") {
-      activateButton("hoarder");
-    } else if (currentBoard === "Winter Scene") {
-      activateButton("winter");
-    } else if (currentBoard === "Chess Scene") {
-      activateButton("chess");
-    } else if (currentBoard === "Assortment One") {
-      activateButton("assortOne");
-    } else if (currentBoard === "Assortment Two") {
-      activateButton("assortTwo");
-    } else if (currentBoard === "Room Scene") {
-      activateButton("room");
-    }
-  }, [currentBoard, currentLeaderArray]);
-
-  //--------------------------------
-  // ! this was in firebase... where should this be??
-  // ---------------------
+  const activeKey = {
+    "Winter Scene": "winter",
+    "Chess Scene": "chess",
+    "Assortment One": "assortOne",
+    "Assortment Two": "assortTwo",
+    "Room Scene": "room",
+    "Hoarder Scene": "hoarder",
+  };
 
   function getUserData(board) {
     const boardRef = ref(db, board + "/");
@@ -75,58 +62,32 @@ const Leaderboard = (props) => {
     }
   }
 
+  // todo figure out how to not get duplicate data in the leader board
+  // todo do I need to setCurrentLeaderArray([]) in game.js on exit?
+
   //---------------------------------------
 
+  const levelKey = {
+    winter: "Winter Scene",
+    chess: "Chess Scene",
+    assortOne: "Assortment One",
+    assortTwo: "Assortment Two",
+    room: "Room Scene",
+    hoarder: "Hoarder Scene",
+  };
+
   function changeLevel(level) {
-    if (level === "chess") {
-      getUserData("Chess Scene");
-    } else if (level === "winter") {
-      getUserData("Winter Scene");
-    } else if (level === "assortOne") {
-      getUserData("Assortment One");
-    } else if (level === "assortTwo") {
-      getUserData("Assortment Two");
-    } else if (level === "room") {
-      getUserData("Room Scene");
-    } else if (level === "hoarder") {
-      getUserData("Hoarder Scene");
-    }
-
-    changeHeader(level);
+    getUserData(levelKey[level]);
+    setCurrentBoard(levelKey[level]);
   }
 
-  function changeHeader(level) {
-    if (level === "chess") {
-      setCurrentBoard("Chess Scene");
-    } else if (level === "winter") {
-      setCurrentBoard("Winter Scene");
-    } else if (level === "assortOne") {
-      setCurrentBoard("Assortment One");
-    } else if (level === "assortTwo") {
-      setCurrentBoard("Assortment Two");
-    } else if (level === "room") {
-      setCurrentBoard("Room Scene");
-    } else if (level === "hoarder") {
-      setCurrentBoard("Hoarder Scene");
+  const buttonClass = (level) => {
+    if (level === currentBoard) {
+      return "levelBtn activeBtn";
+    } else {
+      return "levelBtn";
     }
-
-    activateButton(level);
-  }
-
-  function activateButton(level) {
-    const idEdit = level.replace(/\s+/g, "").toLowerCase();
-
-    // todo get rid of query selector
-    let newID = document.querySelector(`#${idEdit}`);
-
-    // TODO get rid of query selector
-    let allBtns = document.querySelectorAll(".levelBtn");
-    for (let i = 0; i < allBtns.length; i++) {
-      allBtns[i].classList.remove("activeBtn");
-    }
-
-    newID.classList.add("activeBtn");
-  }
+  };
 
   return (
     <div id="leader-main">
@@ -137,31 +98,37 @@ const Leaderboard = (props) => {
             name="Winter Scene"
             level="winter"
             change={changeLevel}
+            class={buttonClass("Winter Scene")}
           ></LevelBtn>
           <LevelBtn
             name="Chess Scene"
             level="chess"
             change={changeLevel}
+            class={buttonClass("Chess Scene")}
           ></LevelBtn>
           <LevelBtn
             name="Assortment One"
             level="assortOne"
             change={changeLevel}
+            class={buttonClass("Assortment One")}
           ></LevelBtn>
           <LevelBtn
             name="Assortment Two"
             level="assortTwo"
             change={changeLevel}
+            class={buttonClass("Assortment Two")}
           ></LevelBtn>
           <LevelBtn
             name="Room Scene"
             level="room"
             change={changeLevel}
+            class={buttonClass("Room Scene")}
           ></LevelBtn>
           <LevelBtn
             name="Hoarder Scene"
             level="hoarder"
             change={changeLevel}
+            class={buttonClass("Hoarder Scene")}
           ></LevelBtn>
         </div>
       </div>
@@ -182,7 +149,6 @@ const Leaderboard = (props) => {
               </thead>
               <tbody>
                 {currentLeaderArray.map((value, key) => {
-                  console.log(value);
                   return (
                     <tr key={key}>
                       <td>{key + 1}</td>

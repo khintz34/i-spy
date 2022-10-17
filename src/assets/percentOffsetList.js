@@ -52,8 +52,8 @@ export const LocationPercentList = {
     },
     {
       name: "Car",
-      x: 0.63,
-      y: 0.13,
+      x: 0.76,
+      y: 0.41,
       found: false,
     },
     {

@@ -7,7 +7,7 @@ const LevelBtn = (props) => {
   return (
     <button
       id={idEdit}
-      className="levelBtn"
+      className={props.class}
       onClick={() => {
         props.change(props.level);
       }}
