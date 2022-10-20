@@ -62,9 +62,6 @@ const Leaderboard = (props) => {
     }
   }
 
-  // todo figure out how to not get duplicate data in the leader board
-  // todo do I need to setCurrentLeaderArray([]) in game.js on exit?
-
   //---------------------------------------
 
   const levelKey = {

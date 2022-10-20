@@ -2,6 +2,7 @@
 .bm-burger-button {
   position: fixed;
   width: 3vw;
+  min-width: 25px;
   height: 4vh;
   left: 3vw;
   top: 3vh;
@@ -35,6 +36,8 @@
 .bm-menu-wrap {
   position: fixed;
   height: 100%;
+  left: 0px;
+  top: 10vh;
 }
 
 /* General sidebar styles */
@@ -63,6 +66,8 @@
 /* Styling of overlay */
 .bm-overlay {
   background: rgba(0, 0, 0, 0.3);
+  left: 0;
+  top: 10vh;
 }
 
 /* Individual item */

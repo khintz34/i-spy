@@ -22,6 +22,7 @@
   top: 10vh;
   left: 0vw;
   width: 100%;
+  overflow: auto;
 }
 
 #levelHolder {
@@ -30,7 +31,6 @@
   gap: 50px;
   margin-top: 2vh;
   width: 80%;
-  /* height: 60vh; */
 }
 
 header {
@@ -43,6 +43,10 @@ header {
   top: 100;
   width: 100%;
   z-index: 1000;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .sceneImg {
@@ -56,6 +60,8 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: sticky;
+  left: 0;
 }
 
 .link {

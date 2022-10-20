@@ -4,7 +4,8 @@ import "../styles/Game.css";
 import { LocationPercentList } from "../assets/percentOffsetList";
 import { CurrentBoardContext } from "../contexts/CurrentBoard";
 import { db } from "../utils/firebase";
-import { ref, set, push } from "firebase/database";
+import { ref, set, push, onValue } from "firebase/database";
+import { CurrentLeaderBoardContext } from "../contexts/CurrentLeaderBoardArray";
 
 const Game = (props) => {
   const searchArray = props.search.map((value, key) => {
@@ -24,6 +25,9 @@ const Game = (props) => {
   const [imgWidth, setImgWidth] = useState(0);
   const dropDownRef = useRef();
   const modalRef = useRef();
+  const { currentLeaderArray, setCurrentLeaderArray } = useContext(
+    CurrentLeaderBoardContext
+  );
 
   useEffect(() => {
     return () => {
@@ -43,6 +47,40 @@ const Game = (props) => {
       username: name,
       time: time,
     });
+
+    getUserData(currentBoard);
+  }
+
+  function getUserData(board) {
+    const boardRef = ref(db, board + "/");
+    let displayArray = [];
+
+    onValue(
+      boardRef,
+      (snapshot) => {
+        snapshot.forEach((childSnapShot) => {
+          const childKey = childSnapShot.key;
+          const childData = childSnapShot.val();
+          let obj = { username: childData.username, time: childData.time };
+          addData(obj);
+        });
+      },
+      {
+        onlyOnce: false,
+      }
+    );
+
+    function addData(obj) {
+      displayArray.push(obj);
+      sortArray();
+    }
+
+    function sortArray() {
+      displayArray.sort((a, b) => {
+        return a.time - b.time;
+      });
+      setCurrentLeaderArray(displayArray);
+    }
   }
 
   useEffect(() => {
@@ -105,10 +143,7 @@ const Game = (props) => {
   };
 
   function checkLocation(item) {
-    console.log("---Checking Location---");
-
     const ListKey = LocationKey[currentBoard];
-    console.log(currentBoard);
     const LocationListMap = LocationPercentList[ListKey];
     LocationListMap.map((value, key) => {
       if (LocationListMap[key]["name"] === item) {
@@ -120,15 +155,9 @@ const Game = (props) => {
             value.y * imgHeight + offsetY >= yValue - imgHeight * 0.05 &&
             value.y * imgHeight + offsetY <= yValue + imgHeight * 0.05
           ) {
-            console.log("---Setting to found---");
             setToFound(item);
             LocationListMap[key]["found"] = true;
-            console.log(LocationListMap[key]["found"]);
-          } else {
-            console.log("Wrong Item Clicked, wrong Y Value");
           }
-        } else {
-          console.log("Wrong Item Clicked, wrong X Value");
         }
       }
     });
@@ -144,10 +173,7 @@ const Game = (props) => {
   }
 
   function submitModal() {
-    console.log("---SUBMIT MODAL---");
     writeUserData(currentBoard, username, endTime - startTime);
-    console.log("writing data", currentBoard, username, endTime - startTime);
-    console.log("----------------");
     exitModal();
   }
 
@@ -172,7 +198,7 @@ const Game = (props) => {
     <div>
       <div id="gameHolder">
         <div id="finderDiv">
-          <h2 style={{ paddingLeft: "2vw" }}>I Spy List: </h2>
+          <h2 style={{ paddingLeft: "2.5vw" }}>I Spy List: </h2>
           <br />
           <br />
           <ul id="finderList">

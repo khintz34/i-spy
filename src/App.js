@@ -44,7 +44,6 @@ function App() {
                     element={
                       <Game
                         img={levelOne}
-                        //todo update each game like this one
                         search={LocationPercentList["WinterLocations"].map(
                           (value, key) => {
                             return value;

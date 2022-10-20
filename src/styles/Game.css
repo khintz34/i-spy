@@ -2,17 +2,17 @@
   padding-top: 10vh;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100vw;
+  overflow: auto;
 }
 
 .gameFull {
   height: 90vh;
   width: auto;
-  /* z-index: 2; */
-  overflow: auto;
   flex-shrink: 0;
+  /* float: right; */
 }
 
 .gameFull:hover {
@@ -21,22 +21,28 @@
 
 #imgHolder {
   width: 80vw;
+  height: 90vh;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
+}
+
+@media only screen and (min-width: 1000px) {
+  #imgHolder {
+    justify-content: center;
+  }
 }
 
 #finderDiv {
   width: 20vw;
   background-color: #e0e0e0;
   height: 90vh;
-  margin-right: auto;
   padding-top: 5vh;
   text-align: left;
   overflow: auto;
-  /* z-index: 2; */
+  min-width: 200px;
 }
 
-.finderList {
+#finderList {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -48,15 +54,11 @@
   padding: 0;
 }
 
-.strike {
-  text-decoration: line-through;
-  color: red;
-}
-
 .searchField {
   border: none;
   min-height: 5vh;
-  width: 80%;
+  width: 100%;
+  padding-left: 2.5vw;
   background-color: var(--header);
   font-size: 25px;
   border-radius: 10px;
@@ -64,6 +66,11 @@
   margin-bottom: 10px;
   margin-top: 10px;
   min-width: 150px;
+}
+
+.strike {
+  text-decoration: line-through;
+  color: red;
 }
 
 #dropdown {

@@ -2,9 +2,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  width: 100%;
-  /* text-overflow: auto; */
+  height: 50%;
+  width: 50%;
 }
 
 .linkHead {
@@ -14,4 +13,8 @@
 
 .linkHead:hover {
   color: var(--pink-color);
+}
+
+.linkHead > h1 {
+  font-size: max(3vw, 20px);
 }

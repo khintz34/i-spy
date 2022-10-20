@@ -4,6 +4,7 @@
   border: 1px solid var(--main);
   border-radius: 10px;
   margin-top: 1vh;
+  margin-right: 10px;
 }
 
 .levelMini:hover {
