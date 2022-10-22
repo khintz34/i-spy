@@ -17,11 +17,13 @@ import { CurrentLevelContext } from "./contexts/CurrentLevel";
 import { CurrentBoardContext } from "./contexts/CurrentBoard";
 import { CurrentLeaderBoardContext } from "./contexts/CurrentLeaderBoardArray";
 import { LocationPercentList } from "./assets/percentOffsetList";
+import { AuthContext } from "./contexts/AuthContext";
 
 function App() {
   const [currentLevel, setCurrentLevel] = useState([]);
   const [currentBoard, setCurrentBoard] = useState([]);
   const [currentLeaderArray, setCurrentLeaderArray] = useState([]);
+  const [currentAuth, setCurrentAuth] = useState(false);
 
   return (
     <BrowserRouter>
@@ -36,91 +38,93 @@ function App() {
               <CurrentLeaderBoardContext.Provider
                 value={{ currentLeaderArray, setCurrentLeaderArray }}
               >
-                <Header />
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route
-                    path="/game1"
-                    element={
-                      <Game
-                        img={levelOne}
-                        search={LocationPercentList["WinterLocations"].map(
-                          (value, key) => {
+                <AuthContext.Provider value={{ currentAuth, setCurrentAuth }}>
+                  <Header />
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route
+                      path="/game1"
+                      element={
+                        <Game
+                          img={levelOne}
+                          search={LocationPercentList["WinterLocations"].map(
+                            (value, key) => {
+                              return value;
+                            }
+                          )}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/game2"
+                      element={
+                        <Game
+                          img={levelTwo}
+                          search={LocationPercentList["ChessLocations"].map(
+                            (value, key) => {
+                              return value;
+                            }
+                          )}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/game3"
+                      element={
+                        <Game
+                          img={levelThree}
+                          search={LocationPercentList[
+                            "AssortmentOneLocations"
+                          ].map((value, key) => {
                             return value;
-                          }
-                        )}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/game2"
-                    element={
-                      <Game
-                        img={levelTwo}
-                        search={LocationPercentList["ChessLocations"].map(
-                          (value, key) => {
+                          })}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/game4"
+                      element={
+                        <Game
+                          img={levelFour}
+                          search={LocationPercentList[
+                            "AssortmentTwoLocations"
+                          ].map((value, key) => {
                             return value;
-                          }
-                        )}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/game3"
-                    element={
-                      <Game
-                        img={levelThree}
-                        search={LocationPercentList[
-                          "AssortmentOneLocations"
-                        ].map((value, key) => {
-                          return value;
-                        })}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/game4"
-                    element={
-                      <Game
-                        img={levelFour}
-                        search={LocationPercentList[
-                          "AssortmentTwoLocations"
-                        ].map((value, key) => {
-                          return value;
-                        })}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/game5"
-                    element={
-                      <Game
-                        img={levelFive}
-                        search={LocationPercentList["RoomLocations"].map(
-                          (value, key) => {
-                            return value;
-                          }
-                        )}
-                      />
-                    }
-                  />
-                  <Route
-                    path="/game6"
-                    element={
-                      <Game
-                        img={levelSix}
-                        search={LocationPercentList["HoarderLocations"].map(
-                          (value, key) => {
-                            return value;
-                          }
-                        )}
-                      />
-                    }
-                  />
-                  <Route path="/leaderboard" element={<Leaderboard />} />
-                  <Route path="/rules" element={<Rules />} />
-                  <Route path="/about" element={<About />} />
-                </Routes>
+                          })}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/game5"
+                      element={
+                        <Game
+                          img={levelFive}
+                          search={LocationPercentList["RoomLocations"].map(
+                            (value, key) => {
+                              return value;
+                            }
+                          )}
+                        />
+                      }
+                    />
+                    <Route
+                      path="/game6"
+                      element={
+                        <Game
+                          img={levelSix}
+                          search={LocationPercentList["HoarderLocations"].map(
+                            (value, key) => {
+                              return value;
+                            }
+                          )}
+                        />
+                      }
+                    />
+                    <Route path="/leaderboard" element={<Leaderboard />} />
+                    <Route path="/rules" element={<Rules />} />
+                    <Route path="/about" element={<About />} />
+                  </Routes>
+                </AuthContext.Provider>
               </CurrentLeaderBoardContext.Provider>
             </CurrentBoardContext.Provider>
           </CurrentLevelContext.Provider>
