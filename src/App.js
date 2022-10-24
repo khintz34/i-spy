@@ -3,7 +3,7 @@ import "./App.css";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Game from "./components/Game";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, HashRouter } from "react-router-dom";
 import levelOne from "../src/images/levelOne.png";
 import levelTwo from "../src/images/levelTwo.jpeg";
 import levelThree from "../src/images/levelThree.jpeg";
@@ -26,7 +26,8 @@ function App() {
   const [currentAuth, setCurrentAuth] = useState(false);
 
   return (
-    <BrowserRouter>
+    // <BrowserRouter>
+    <HashRouter>
       <div className="App" id="outer-container">
         <div id="page-wrap">
           <CurrentLevelContext.Provider
@@ -41,7 +42,7 @@ function App() {
                 <AuthContext.Provider value={{ currentAuth, setCurrentAuth }}>
                   <Header />
                   <Routes>
-                    <Route path="/i-spy" element={<Home />} />
+                    <Route path="/" element={<Home />} />
                     <Route
                       path="/game1"
                       element={
@@ -130,7 +131,8 @@ function App() {
           </CurrentLevelContext.Provider>
         </div>
       </div>
-    </BrowserRouter>
+      {/* </BrowserRouter> */}
+    </HashRouter>
   );
 }
 
