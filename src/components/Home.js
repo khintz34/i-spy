@@ -26,7 +26,7 @@ const Home = (props) => {
         // The signed-in user info.
         const user = result.user;
         setCurrentAuth(true);
-        console.log(user.name);
+        console.log(user);
         // ...
       })
       .catch((error) => {
