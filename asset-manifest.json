@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/i-spy/static/css/main.74f060fb.css",
+    "main.js": "/i-spy/static/js/main.b017f9b9.js",
+    "static/js/787.4345072c.chunk.js": "/i-spy/static/js/787.4345072c.chunk.js",
+    "static/media/levelSix.webp": "/i-spy/static/media/levelSix.031934cc686a8285ab44.webp",
+    "static/media/levelOne.jpeg": "/i-spy/static/media/levelOne.e368abde1716fb8ef7b6.jpeg",
+    "static/media/levelThree.jpeg": "/i-spy/static/media/levelThree.4808d4d4ef076e6ede06.jpeg",
+    "static/media/levelTwo.jpeg": "/i-spy/static/media/levelTwo.6084d2c4f94fd2c17512.jpeg",
+    "static/media/levelFive.jpeg": "/i-spy/static/media/levelFive.337915f57ecee7855921.jpeg",
+    "static/media/levelOne.png": "/i-spy/static/media/levelOne.ae45d15027a61a86c98b.png",
+    "static/media/levelFour.jpeg": "/i-spy/static/media/levelFour.5e6427380d525cba381a.jpeg",
+    "index.html": "/i-spy/index.html",
+    "main.74f060fb.css.map": "/i-spy/static/css/main.74f060fb.css.map",
+    "main.b017f9b9.js.map": "/i-spy/static/js/main.b017f9b9.js.map",
+    "787.4345072c.chunk.js.map": "/i-spy/static/js/787.4345072c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.74f060fb.css",
+    "static/js/main.b017f9b9.js"
+  ]
+}
