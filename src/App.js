@@ -41,7 +41,7 @@ function App() {
                 <AuthContext.Provider value={{ currentAuth, setCurrentAuth }}>
                   <Header />
                   <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/i-spy" element={<Home />} />
                     <Route
                       path="/game1"
                       element={
