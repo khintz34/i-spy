@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { slide as Menu } from "react-burger-menu";
+import { Link } from "react-router-dom";
 import "../styles/Sidebar.css";
 
 // ...
@@ -8,7 +9,7 @@ const Sidebar = () => {
   return (
     <Menu>
       <a className="menu-item" href="/">
-        Home
+        <Link to="/">Home</Link>
       </a>
       <a className="menu-item" href="/leaderboard">
         Leaderboard
